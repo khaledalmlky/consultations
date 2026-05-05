@@ -1,0 +1,3177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>خالد المالكي | للاستشارات والتخطيط الشخصي</title>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyChu_2oKy1Y8s7v5SqkkTL8rxWE1Mly5ZA",
+    authDomain: "khaled-almalky-platform.firebaseapp.com",
+    projectId: "khaled-almalky-platform",
+    storageBucket: "khaled-almalky-platform.firebasestorage.app",
+    messagingSenderId: "668904661917",
+    appId: "1:668904661917:web:e232b9a910f89f070f8574"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // إتاحة الدوال للاستخدام في الكود الرئيسي
+  window.firebaseDB = {
+    db, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp
+  };
+  window.firebaseReady = true;
+  document.dispatchEvent(new Event('firebaseReady'));
+</script>
+
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  (function() {
+    emailjs.init({ publicKey: "4VURg94SQWkQ42Vve" });
+  })();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy-900:#1a3a6e;
+  --navy-800:#234a85;
+  --navy-700:#2c5a9c;
+  --navy-600:#3d6db0;
+  --navy-500:#5283bf;
+
+  --gold-300:#f5d98c;
+  --gold-400:#e9c46a;
+  --gold-500:#d4a23c;
+  --gold-600:#b8862a;
+  --gold-700:#8c6420;
+
+  --cream:#faf6ee;
+  --cream-2:#f3ecdc;
+  --white:#ffffff;
+  --soft-white:#fdfbf6;
+
+  --ink:#1a3a6e;
+  --text-primary:#2c3e50;
+  --text-secondary:#5a6b7d;
+  --muted:#8a96a8;
+
+  --line:rgba(184,134,42,.15);
+  --line-strong:rgba(184,134,42,.3);
+  --shadow-lg:0 30px 80px -20px rgba(26,58,110,.25);
+  --shadow-md:0 12px 35px -10px rgba(26,58,110,.15);
+  --shadow-sm:0 4px 14px rgba(26,58,110,.06);
+  --radius:18px;
+  --radius-sm:12px;
+
+  --success:#3a9d6e;
+  --warning:#d49b3c;
+  --danger:#c95252;
+
+  /* DISC colors */
+  --disc-d:#c95252;
+  --disc-i:#d49b3c;
+  --disc-s:#3a9d6e;
+  --disc-c:#5283bf;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden}
+body{
+  font-family:'Tajawal',sans-serif;
+  background:var(--cream);
+  color:var(--text-primary);
+  line-height:1.6;
+  min-height:100vh;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+
+.bg-decor{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(233,196,106,.1), transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(82,131,191,.06), transparent 50%),
+    var(--cream);
+}
+.bg-decor::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(26,58,110,.05) 1px, transparent 0);
+  background-size:32px 32px;
+  mask-image:radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+.app{min-height:100vh;display:flex;flex-direction:column}
+.container{width:100%;max-width:780px;margin:0 auto;padding:24px 20px 60px}
+.container-wide{max-width:1200px}
+
+/* === Header === */
+.brand-header{
+  padding:18px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--line);
+  background:rgba(250,246,238,.92);
+  backdrop-filter:blur(12px);
+  position:sticky;top:0;z-index:50;
+}
+.brand{display:flex;align-items:center;gap:12px;cursor:pointer}
+
+/* الشعار الجديد - حرفي خ.م */
+.brand-logo{
+  width:48px;height:48px;border-radius:14px;
+  background:linear-gradient(135deg,var(--navy-700),var(--navy-900));
+  display:grid;place-items:center;
+  box-shadow:0 8px 22px rgba(26,58,110,.3),inset 0 1px 0 rgba(255,255,255,.15);
+  position:relative;overflow:hidden;
+  flex-shrink:0;
+}
+.brand-logo::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 25% 25%, rgba(233,196,106,.3), transparent 65%);
+}
+.brand-logo::after{
+  content:"";position:absolute;inset:3px;border-radius:11px;
+  border:1px solid rgba(233,196,106,.25);
+}
+.brand-logo .monogram{
+  font-family:'Amiri',serif;
+  color:var(--gold-400);
+  font-size:22px;
+  font-weight:700;
+  position:relative;z-index:1;
+  line-height:1;
+  letter-spacing:-2px;
+}
+.brand-logo .logo-icon{
+  width:24px;height:24px;
+  position:relative;z-index:1;
+  color:var(--gold-400);
+}
+.brand-logo .logo-icon svg{width:100%;height:100%}
+
+.brand-name{font-weight:800;font-size:16px;color:var(--navy-900);letter-spacing:-.3px;line-height:1.2}
+.brand-name span{color:var(--gold-700);font-weight:500;font-size:11px;display:block;margin-top:3px;letter-spacing:0}
+
+/* === Hero === */
+.hero{padding:50px 0 30px;text-align:center;position:relative}
+.hero-ornament{
+  width:96px;height:96px;margin:0 auto 28px;
+  background:linear-gradient(135deg,var(--navy-700),var(--navy-900));
+  border-radius:28px;display:grid;place-items:center;
+  box-shadow:var(--shadow-md);
+  position:relative;
+}
+.hero-ornament::after{
+  content:"";position:absolute;inset:-8px;border-radius:34px;
+  border:1px dashed var(--gold-500);opacity:.5;
+  animation:spin 30s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-ornament .monogram{
+  font-family:'Amiri',serif;
+  color:var(--gold-400);
+  font-size:42px;
+  font-weight:700;
+  letter-spacing:-4px;
+}
+.hero-ornament .logo-icon{
+  width:48px;height:48px;
+  color:var(--gold-400);
+  position:relative;z-index:1;
+}
+.hero-ornament .logo-icon svg{width:100%;height:100%}
+
+.hero-eyebrow{
+  display:inline-block;
+  font-size:12px;font-weight:600;letter-spacing:1.5px;
+  color:var(--gold-700);
+  padding:6px 14px;background:rgba(233,196,106,.15);
+  border-radius:999px;margin-bottom:18px;
+  border:1px solid rgba(233,196,106,.4);
+}
+.hero h1{
+  font-size:clamp(28px,6vw,42px);
+  font-weight:800;color:var(--navy-900);
+  line-height:1.2;letter-spacing:-1px;
+  margin-bottom:14px;
+}
+.hero h1 em{
+  font-family:'Amiri',serif;font-style:normal;
+  color:var(--gold-700);font-weight:700;
+}
+.hero p{
+  font-size:16px;color:var(--text-secondary);
+  max-width:480px;margin:0 auto 36px;
+  line-height:1.7;
+}
+
+/* === Buttons === */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:15px 30px;border-radius:14px;
+  font-family:inherit;font-weight:700;font-size:15px;
+  border:none;cursor:pointer;text-decoration:none;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;
+  white-space:nowrap;
+}
+.btn svg{width:18px;height:18px;flex-shrink:0}
+.btn-primary{
+  background:linear-gradient(135deg,var(--navy-800),var(--navy-900));
+  color:var(--gold-300);
+  box-shadow:0 10px 25px -5px rgba(26,58,110,.35);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 15px 30px -8px rgba(26,58,110,.45)}
+
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold-500),var(--gold-600));
+  color:white;
+  box-shadow:0 10px 25px -5px rgba(184,134,42,.35);
+}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 15px 30px -8px rgba(184,134,42,.45)}
+
+.btn-secondary{
+  background:white;color:var(--navy-800);
+  border:1.5px solid var(--line-strong);
+}
+.btn-secondary:hover{border-color:var(--navy-700);background:var(--navy-800);color:white}
+
+.btn-danger{
+  background:white;color:var(--danger);
+  border:1.5px solid rgba(201,82,82,.3);
+}
+.btn-danger:hover{background:var(--danger);color:white;border-color:var(--danger)}
+
+.btn-ghost{
+  background:transparent;color:var(--text-secondary);
+  font-weight:500;font-size:14px;padding:10px 18px;
+}
+.btn-ghost:hover{color:var(--navy-700)}
+.btn-sm{padding:9px 16px;font-size:13px;border-radius:10px}
+.btn-block{width:100%}
+
+.card{
+  background:white;border-radius:var(--radius);
+  padding:28px;box-shadow:var(--shadow-sm);
+  border:1px solid var(--line);
+  margin-bottom:20px;
+}
+
+/* === Forms === */
+.form-group{margin-bottom:22px}
+.form-label{
+  display:block;font-weight:600;font-size:14px;
+  color:var(--navy-800);margin-bottom:8px;
+}
+.form-label .req{color:var(--gold-700);font-weight:400}
+.form-hint{font-size:12px;color:var(--muted);margin-top:6px}
+
+.input,.textarea,.select{
+  width:100%;padding:14px 16px;
+  border:1.5px solid var(--line);border-radius:12px;
+  background:var(--soft-white);
+  font-family:inherit;font-size:15px;color:var(--text-primary);
+  transition:all .2s;
+  font-weight:500;
+}
+.input:focus,.textarea:focus,.select:focus{
+  outline:none;border-color:var(--gold-500);
+  background:white;
+  box-shadow:0 0 0 4px rgba(233,196,106,.15);
+}
+.textarea{resize:vertical;min-height:110px;font-weight:400;line-height:1.7}
+
+/* === Type cards === */
+.type-cards{display:grid;gap:14px;margin-top:8px}
+.type-card{
+  position:relative;cursor:pointer;
+  padding:22px 20px;border-radius:16px;
+  background:white;border:2px solid var(--line);
+  transition:all .25s;
+  display:flex;gap:16px;align-items:flex-start;
+}
+.type-card input{position:absolute;opacity:0;pointer-events:none}
+.type-card:hover{border-color:var(--gold-500);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.type-card.selected{
+  border-color:var(--gold-500);
+  background:linear-gradient(135deg, rgba(233,196,106,.08), rgba(184,134,42,.04));
+}
+.type-card.selected .type-icon{background:var(--gold-500);color:white}
+.type-icon{
+  width:46px;height:46px;flex-shrink:0;
+  border-radius:12px;background:rgba(184,134,42,.12);
+  display:grid;place-items:center;color:var(--gold-700);
+  transition:all .25s;
+}
+.type-icon svg{width:22px;height:22px}
+.type-info h3{font-size:17px;font-weight:700;color:var(--navy-900);margin-bottom:4px}
+.type-desc{font-size:13.5px;color:var(--text-secondary);line-height:1.5}
+
+/* === Progress === */
+.progress-wrap{
+  background:white;border-radius:var(--radius);
+  padding:18px 22px;margin-bottom:22px;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-sm);
+}
+.progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.progress-step{font-size:12px;font-weight:600;color:var(--gold-700);letter-spacing:.5px}
+.progress-title{font-size:14px;font-weight:700;color:var(--navy-800)}
+.progress-bar{height:6px;background:var(--cream-2);border-radius:999px;overflow:hidden;position:relative}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--gold-400),var(--gold-600));
+  border-radius:999px;transition:width .4s ease;
+}
+
+/* === Likert === */
+.likert-q{
+  background:var(--soft-white);
+  border:1px solid var(--line);
+  border-radius:14px;padding:18px;margin-bottom:14px;
+}
+.likert-text{font-size:15px;font-weight:600;color:var(--navy-800);margin-bottom:14px;line-height:1.5}
+.likert-options{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.likert-opt{
+  padding:10px 4px;border-radius:10px;
+  background:white;border:1.5px solid var(--line);
+  font-size:13px;font-weight:600;color:var(--text-secondary);
+  cursor:pointer;transition:all .2s;text-align:center;
+}
+.likert-opt:hover{border-color:var(--gold-500)}
+.likert-opt.selected{
+  background:linear-gradient(135deg,var(--gold-500),var(--gold-600));
+  color:white;border-color:var(--gold-600);
+  transform:scale(1.05);
+  box-shadow:0 4px 12px rgba(184,134,42,.3);
+}
+.likert-num{display:block;font-size:11px;font-weight:500;opacity:.85;margin-top:2px}
+
+/* === DISC test - مبسط === */
+.disc-q{
+  background:var(--soft-white);
+  border:1px solid var(--line);
+  border-radius:14px;padding:18px;margin-bottom:14px;
+  position:relative;
+}
+.disc-q-num{
+  position:absolute;top:-8px;right:14px;
+  background:var(--navy-800);color:var(--gold-400);
+  font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:999px;
+}
+.disc-text{font-size:15px;font-weight:600;color:var(--navy-800);margin-bottom:14px;line-height:1.5;padding-top:6px}
+
+/* === Goals === */
+.goals-grid{display:grid;gap:12px}
+.goal-row{
+  background:var(--soft-white);border:1px solid var(--line);
+  border-radius:12px;padding:14px;
+}
+.goal-label{
+  display:flex;align-items:center;gap:8px;
+  font-weight:700;font-size:14px;color:var(--navy-800);
+  margin-bottom:8px;
+}
+.goal-icon{
+  width:30px;height:30px;border-radius:8px;
+  background:rgba(233,196,106,.2);color:var(--gold-700);
+  display:grid;place-items:center;font-size:15px;
+}
+.goal-row textarea{
+  background:white;border:1px solid var(--line);
+  min-height:60px;padding:10px 12px;border-radius:10px;
+  font-family:inherit;width:100%;font-size:14px;line-height:1.6;
+  resize:vertical;color:var(--text-primary);
+}
+.goal-row textarea:focus{outline:none;border-color:var(--gold-500)}
+
+/* === Time slots === */
+.time-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(95px, 1fr));
+  gap:8px;
+}
+.time-slot{
+  padding:12px 10px;border-radius:10px;
+  background:white;border:1.5px solid var(--line);
+  font-family:inherit;font-size:14px;font-weight:600;
+  color:var(--navy-800);cursor:pointer;
+  transition:all .2s;text-align:center;
+  direction:ltr;
+}
+.time-slot:hover{border-color:var(--gold-500);background:var(--soft-white)}
+.time-slot.selected{
+  background:linear-gradient(135deg,var(--navy-800),var(--navy-900));
+  color:var(--gold-400);
+  border-color:var(--navy-800);
+  transform:scale(1.05);
+  box-shadow:0 4px 12px rgba(26,58,110,.25);
+}
+.time-section-title{
+  font-size:13px;font-weight:700;color:var(--gold-700);
+  margin:18px 0 10px;display:flex;align-items:center;gap:8px;
+}
+.time-section-title:first-of-type{margin-top:8px}
+.time-section-title::after{
+  content:"";flex:1;height:1px;background:var(--line);
+}
+
+/* === Date picker === */
+.date-pills{
+  display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;
+  scrollbar-width:none;
+}
+.date-pills::-webkit-scrollbar{display:none}
+.date-pill{
+  flex-shrink:0;
+  min-width:75px;padding:12px 8px;
+  background:white;border:1.5px solid var(--line);
+  border-radius:14px;cursor:pointer;
+  text-align:center;transition:all .2s;
+  font-family:inherit;
+}
+.date-pill:hover{border-color:var(--gold-500)}
+.date-pill.selected{
+  background:linear-gradient(135deg,var(--navy-800),var(--navy-900));
+  color:white;border-color:var(--navy-800);
+  transform:scale(1.05);
+  box-shadow:0 4px 12px rgba(26,58,110,.25);
+}
+.date-pill.selected .day-num{color:var(--gold-400)}
+.date-pill.selected .day-name,.date-pill.selected .day-month{color:rgba(255,255,255,.85)}
+.day-name{font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:4px}
+.day-num{font-size:22px;font-weight:800;color:var(--navy-900);line-height:1}
+.day-month{font-size:11px;color:var(--text-secondary);margin-top:4px}
+
+.form-nav{
+  display:flex;gap:12px;margin-top:30px;
+  padding-top:24px;border-top:1px solid var(--line);
+}
+.form-nav .btn{flex:1}
+
+/* === Success === */
+.success-screen{
+  text-align:center;padding:50px 30px;
+  background:white;border-radius:var(--radius);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-md);
+}
+.success-icon{
+  width:90px;height:90px;margin:0 auto 24px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--gold-500),var(--gold-600));
+  display:grid;place-items:center;
+  box-shadow:0 15px 35px -10px rgba(184,134,42,.5);
+  position:relative;animation:popIn .5s ease;
+}
+@keyframes popIn{0%{transform:scale(0)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+.success-icon::after{
+  content:"";position:absolute;inset:-8px;border-radius:50%;
+  border:2px solid var(--gold-400);opacity:.4;
+}
+.success-icon svg{width:42px;height:42px;color:white}
+.success-screen h2{font-size:26px;color:var(--navy-900);margin-bottom:12px}
+.success-screen > p{color:var(--text-secondary);max-width:400px;margin:0 auto 28px}
+.success-summary{
+  background:var(--soft-white);border:1px dashed var(--gold-500);
+  border-radius:14px;padding:18px;margin:20px 0;text-align:right;
+}
+.success-summary div{
+  display:flex;justify-content:space-between;
+  padding:8px 0;font-size:14px;
+  border-bottom:1px solid rgba(184,134,42,.15);
+}
+.success-summary div:last-child{border:none}
+.success-summary strong{color:var(--navy-800);font-weight:600}
+.success-summary span{color:var(--text-secondary)}
+
+/* === Review === */
+.review-block{
+  background:var(--soft-white);
+  border:1px solid var(--line);
+  border-radius:14px;padding:18px;margin-bottom:14px;
+}
+.review-block h4{
+  font-size:13px;font-weight:700;color:var(--gold-700);
+  text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;
+}
+.review-block .edit-btn{
+  font-size:11px;color:var(--navy-700);
+  background:white;border:1px solid var(--line-strong);
+  padding:4px 10px;border-radius:999px;cursor:pointer;
+  font-weight:600;
+}
+.review-block .edit-btn:hover{background:var(--navy-800);color:white;border-color:var(--navy-800)}
+.review-block p{font-size:14px;color:var(--text-primary);line-height:1.7;margin:4px 0}
+.review-block strong{color:var(--navy-800)}
+
+/* ============================================================
+   Dashboard - Light theme
+   ============================================================ */
+.dash-body{background:var(--cream);min-height:100vh;color:var(--text-primary)}
+.dash-header{
+  padding:18px 24px;border-bottom:1px solid var(--line);
+  background:rgba(250,246,238,.95);backdrop-filter:blur(12px);
+  position:sticky;top:0;z-index:50;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.dash-container{max-width:1200px;margin:0 auto;padding:30px 24px}
+.dash-title{
+  font-size:26px;font-weight:800;margin-bottom:6px;color:var(--navy-900);
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.dash-title .chip{
+  font-size:12px;background:linear-gradient(135deg,var(--gold-500),var(--gold-600));
+  color:white;padding:4px 12px;border-radius:999px;font-weight:700;
+}
+.dash-subtitle{color:var(--text-secondary);font-size:14px;margin-bottom:24px}
+
+.dash-link{
+  font-size:13px;color:var(--navy-800);text-decoration:none;
+  padding:9px 16px;border:1px solid var(--line-strong);border-radius:999px;
+  background:white;font-weight:600;
+  transition:all .2s;
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+  font-family:inherit;
+}
+.dash-link:hover{background:var(--navy-800);color:white;border-color:var(--navy-800)}
+
+/* Stats cards */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+  gap:14px;margin-bottom:24px;
+}
+.stat-card{
+  background:white;border:1px solid var(--line);
+  border-radius:14px;padding:18px;
+  box-shadow:var(--shadow-sm);
+}
+.stat-num{font-size:28px;font-weight:800;color:var(--navy-900);line-height:1}
+.stat-label{font-size:12px;color:var(--text-secondary);margin-top:6px;font-weight:600}
+.stat-icon{
+  width:38px;height:38px;border-radius:10px;
+  background:rgba(233,196,106,.15);color:var(--gold-700);
+  display:grid;place-items:center;float:left;
+  margin-bottom:8px;
+}
+
+.dash-toolbar{
+  background:white;border:1px solid var(--line);
+  border-radius:16px;padding:14px;margin-bottom:24px;
+  box-shadow:var(--shadow-sm);
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+}
+.search-input{
+  flex:1;min-width:220px;
+  padding:10px 14px;border:1px solid var(--line);border-radius:10px;
+  background:var(--soft-white);font-family:inherit;font-size:14px;
+}
+.search-input:focus{outline:none;border-color:var(--gold-500);background:white}
+.filter-pill{
+  padding:8px 14px;border-radius:999px;
+  background:var(--soft-white);border:1px solid var(--line);
+  font-size:13px;font-weight:600;cursor:pointer;
+  color:var(--text-secondary);transition:all .2s;
+  font-family:inherit;
+}
+.filter-pill:hover{border-color:var(--gold-500)}
+.filter-pill.active{
+  background:linear-gradient(135deg,var(--navy-800),var(--navy-900));
+  color:white;border-color:var(--navy-800);
+}
+
+.sessions-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(330px,1fr))}
+.session-card{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:16px;padding:20px;
+  cursor:pointer;transition:all .2s;
+  position:relative;overflow:hidden;
+  box-shadow:var(--shadow-sm);
+}
+.session-card.upcoming{
+  border-color:var(--gold-500);
+  box-shadow:0 0 0 3px rgba(233,196,106,.15), var(--shadow-sm);
+}
+.session-card.upcoming::before{
+  content:"قريبة";position:absolute;top:14px;left:14px;
+  font-size:10px;background:var(--gold-500);color:white;
+  padding:3px 10px;border-radius:999px;font-weight:700;letter-spacing:.5px;
+}
+.session-card:hover{
+  transform:translateY(-3px);
+  border-color:var(--gold-500);
+  box-shadow:var(--shadow-md);
+}
+.session-tag{
+  display:inline-block;font-size:11px;
+  padding:4px 10px;border-radius:999px;
+  font-weight:700;letter-spacing:.5px;margin-bottom:12px;
+}
+.tag-general{background:rgba(233,196,106,.15);color:var(--gold-700);border:1px solid rgba(184,134,42,.3)}
+.tag-planning{background:rgba(82,131,191,.12);color:var(--navy-800);border:1px solid rgba(82,131,191,.25)}
+.session-name{font-size:18px;font-weight:700;color:var(--navy-900);margin-bottom:4px}
+.session-phone{font-size:13px;color:var(--text-secondary);margin-bottom:14px;direction:ltr;text-align:right}
+.session-meta{
+  display:flex;justify-content:space-between;
+  font-size:12px;padding-top:14px;
+  border-top:1px solid var(--line);
+  color:var(--text-secondary);
+}
+.session-meta strong{color:var(--gold-700);font-weight:700}
+.session-actions{
+  display:flex;gap:6px;margin-top:12px;
+  padding-top:12px;border-top:1px solid var(--line);
+}
+.icon-btn{
+  width:34px;height:34px;border-radius:10px;
+  background:var(--soft-white);border:1px solid var(--line);
+  display:grid;place-items:center;cursor:pointer;
+  color:var(--text-secondary);transition:all .2s;
+}
+.icon-btn:hover{background:var(--navy-800);color:white;border-color:var(--navy-800)}
+.icon-btn.danger:hover{background:var(--danger);color:white;border-color:var(--danger)}
+.icon-btn svg{width:16px;height:16px}
+
+.empty-state{
+  text-align:center;padding:80px 20px;
+  background:white;border-radius:20px;
+  border:1px dashed var(--line-strong);
+}
+.empty-state svg{width:64px;height:64px;color:var(--gold-500);opacity:.5;margin-bottom:18px}
+.empty-state h3{font-size:20px;color:var(--navy-900);margin-bottom:8px}
+.empty-state p{color:var(--text-secondary);font-size:14px}
+
+/* === Modal === */
+.modal-overlay{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(26,58,110,.55);backdrop-filter:blur(8px);
+  display:none;align-items:flex-start;justify-content:center;
+  padding:30px 20px;overflow-y:auto;
+}
+.modal-overlay.open{display:flex;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{
+  background:var(--cream);color:var(--text-primary);
+  width:100%;max-width:780px;
+  border-radius:20px;overflow:hidden;
+  box-shadow:var(--shadow-lg);
+  border:1px solid var(--line);
+  animation:slideUp .35s cubic-bezier(.4,0,.2,1);
+}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-head{
+  padding:22px 26px;
+  background:linear-gradient(135deg,var(--navy-800),var(--navy-900));
+  color:white;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.modal-head h2{font-size:20px;font-weight:700;color:white}
+.modal-close{
+  background:rgba(255,255,255,.15);border:none;
+  width:36px;height:36px;border-radius:10px;
+  color:white;cursor:pointer;display:grid;place-items:center;
+  transition:background .2s;
+}
+.modal-close:hover{background:rgba(255,255,255,.25)}
+.modal-body{padding:26px;max-height:75vh;overflow-y:auto}
+
+.confirm-modal{max-width:420px;text-align:center}
+.confirm-modal .modal-body{padding:30px 26px}
+.confirm-icon{
+  width:64px;height:64px;border-radius:50%;margin:0 auto 18px;
+  display:grid;place-items:center;
+  background:rgba(201,82,82,.1);color:var(--danger);
+}
+.confirm-icon.lock{background:rgba(82,131,191,.1);color:var(--navy-700)}
+.confirm-icon svg{width:30px;height:30px}
+.confirm-modal h3{font-size:20px;color:var(--navy-900);margin-bottom:8px}
+.confirm-modal p{color:var(--text-secondary);font-size:14px;margin-bottom:20px}
+
+.detail-section{margin-bottom:24px}
+.detail-section h3{
+  font-size:13px;font-weight:700;color:var(--gold-700);
+  text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:12px;padding-bottom:8px;
+  border-bottom:1px solid var(--line);
+}
+.detail-row{
+  display:flex;justify-content:space-between;
+  padding:8px 0;font-size:14px;gap:12px;
+  flex-wrap:wrap;
+}
+.detail-row strong{color:var(--navy-800);font-weight:600;min-width:120px}
+.detail-row span{color:var(--text-primary);flex:1;text-align:left}
+
+.detail-text{
+  background:white;padding:14px 16px;border-radius:12px;
+  border:1px solid var(--line);font-size:14px;line-height:1.7;
+  color:var(--text-primary);
+}
+
+.score-card{
+  background:linear-gradient(135deg,var(--navy-800),var(--navy-900));
+  color:white;padding:22px;border-radius:14px;
+  display:flex;justify-content:space-between;align-items:center;
+  position:relative;overflow:hidden;
+}
+.score-card::before{
+  content:"";position:absolute;top:0;right:0;width:120px;height:120px;
+  background:radial-gradient(circle, rgba(233,196,106,.2), transparent 70%);
+}
+.score-num{font-size:46px;font-weight:800;color:var(--gold-400);line-height:1}
+.score-label{font-size:13px;opacity:.85;margin-bottom:4px}
+.score-cat{font-size:18px;font-weight:700;color:white}
+
+/* === DISC Result Chart === */
+.disc-result{
+  background:white;border:1px solid var(--line);
+  border-radius:14px;padding:20px;margin-top:14px;
+}
+.disc-result-header{
+  text-align:center;margin-bottom:18px;padding-bottom:14px;
+  border-bottom:1px solid var(--line);
+}
+.disc-result-header h4{
+  font-size:14px;color:var(--gold-700);font-weight:700;
+  margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;
+}
+.disc-dominant{
+  font-size:28px;font-weight:800;color:var(--navy-900);
+  margin-bottom:4px;
+}
+.disc-secondary{
+  font-size:13px;color:var(--text-secondary);
+}
+.disc-bars{display:grid;gap:14px}
+.disc-bar-row{display:grid;grid-template-columns:80px 1fr 50px;gap:10px;align-items:center}
+.disc-bar-label{
+  font-size:13px;font-weight:700;
+  display:flex;align-items:center;gap:6px;
+}
+.disc-bar-track{
+  height:18px;background:var(--soft-white);
+  border:1px solid var(--line);
+  border-radius:999px;overflow:hidden;
+}
+.disc-bar-fill{
+  height:100%;border-radius:999px;
+  transition:width .8s cubic-bezier(.4,0,.2,1);
+  display:flex;align-items:center;justify-content:flex-start;
+  padding-right:8px;color:white;font-size:11px;font-weight:700;
+}
+.disc-bar-fill.d{background:linear-gradient(90deg,var(--disc-d),#d66666)}
+.disc-bar-fill.i{background:linear-gradient(90deg,var(--disc-i),#e0a85a)}
+.disc-bar-fill.s{background:linear-gradient(90deg,var(--disc-s),#4eb085)}
+.disc-bar-fill.c{background:linear-gradient(90deg,var(--disc-c),#6694cd)}
+.disc-bar-pct{font-size:13px;font-weight:700;color:var(--navy-800);text-align:left}
+
+.disc-letter{
+  width:24px;height:24px;border-radius:6px;
+  display:grid;place-items:center;
+  font-size:13px;font-weight:800;color:white;
+}
+.disc-letter.d{background:var(--disc-d)}
+.disc-letter.i{background:var(--disc-i)}
+.disc-letter.s{background:var(--disc-s)}
+.disc-letter.c{background:var(--disc-c)}
+
+.tags-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{
+  font-size:12px;padding:5px 12px;
+  background:rgba(184,134,42,.12);color:var(--gold-700);
+  border-radius:999px;font-weight:600;
+  border:1px solid rgba(184,134,42,.3);
+}
+
+/* AI Summary */
+.ai-summary{
+  background:linear-gradient(135deg,rgba(233,196,106,.12),rgba(184,134,42,.05));
+  border:1px solid rgba(184,134,42,.3);
+  padding:20px;border-radius:14px;
+  position:relative;margin-top:16px;
+}
+.ai-summary::before{
+  content:"✦ تحليل ذكي";
+  position:absolute;top:-11px;right:14px;
+  background:linear-gradient(135deg,var(--navy-800),var(--navy-900));color:var(--gold-400);
+  padding:4px 12px;border-radius:999px;
+  font-size:11px;font-weight:700;letter-spacing:.5px;
+}
+.ai-summary p{font-size:14px;line-height:1.8;color:var(--navy-900);margin-top:6px}
+
+.ai-detailed{
+  background:white;border:1px solid var(--line);
+  border-radius:14px;padding:20px;margin-top:14px;
+}
+.ai-detailed h5{
+  font-size:14px;color:var(--navy-900);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.ai-detailed h5::before{
+  content:"";width:4px;height:18px;background:var(--gold-500);
+  border-radius:2px;
+}
+.ai-detailed p{font-size:13.5px;line-height:1.8;color:var(--text-primary);margin-bottom:14px}
+.ai-detailed p:last-child{margin-bottom:0}
+.ai-detailed .recommendation{
+  background:var(--soft-white);border-right:3px solid var(--gold-500);
+  padding:12px 14px;border-radius:0 10px 10px 0;
+  font-size:13.5px;line-height:1.7;margin-bottom:8px;
+  color:var(--text-primary);
+}
+.ai-detailed .recommendation strong{color:var(--navy-900)}
+
+.notes-area{
+  background:white;border:1px solid var(--line);
+  border-radius:14px;padding:14px;
+}
+.notes-area textarea{
+  width:100%;min-height:90px;border:none;outline:none;
+  font-family:inherit;font-size:14px;line-height:1.7;
+  resize:vertical;color:var(--text-primary);
+  background:transparent;
+}
+.notes-area textarea::placeholder{color:var(--muted)}
+
+.email-preview{
+  background:var(--navy-900);color:var(--gold-300);
+  padding:18px;border-radius:12px;
+  font-family:'Courier New',monospace;
+  font-size:12.5px;line-height:1.7;
+  white-space:pre-wrap;direction:ltr;text-align:left;
+  max-height:300px;overflow-y:auto;
+  border:1px solid var(--gold-500);
+}
+
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn-row .btn{flex:1;min-width:120px;font-size:13.5px;padding:11px 14px}
+
+/* === Login screen === */
+.login-screen{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:30px 20px;
+}
+.login-card{
+  background:white;border:1px solid var(--line);
+  border-radius:20px;padding:40px 32px;
+  max-width:400px;width:100%;
+  box-shadow:var(--shadow-lg);
+  text-align:center;
+}
+.login-card .brand-logo{margin:0 auto 18px;width:60px;height:60px;border-radius:16px}
+.login-card .brand-logo .monogram{font-size:26px}
+.login-card h2{font-size:22px;color:var(--navy-900);margin-bottom:8px;font-weight:800}
+.login-card p{font-size:14px;color:var(--text-secondary);margin-bottom:24px}
+.login-card .input{text-align:center;font-weight:700;letter-spacing:1px}
+
+@media (max-width:600px){
+  .container{padding:18px 16px 50px}
+  .card{padding:22px 18px}
+  .hero{padding:30px 0 20px}
+  .hero-ornament{width:80px;height:80px;margin-bottom:22px}
+  .hero-ornament .monogram{font-size:34px}
+  .likert-options{gap:4px}
+  .likert-opt{padding:8px 2px;font-size:12px}
+  .form-nav{flex-direction:column-reverse}
+  .dash-container{padding:22px 16px}
+  .modal{border-radius:16px}
+  .modal-body{padding:20px}
+  .detail-row strong{min-width:auto}
+  .dash-toolbar{flex-direction:column;align-items:stretch}
+  .search-input{min-width:0;width:100%}
+  .disc-bar-row{grid-template-columns:60px 1fr 40px;gap:8px}
+  .disc-bar-label{font-size:11px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+.fade-in{animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+input[type="date"],input[type="time"]{font-family:inherit;color-scheme:light}
+
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(184,134,42,.4);border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:rgba(184,134,42,.6)}
+
+.toast{
+  position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(120%);
+  background:var(--navy-900);color:white;
+  padding:12px 22px;border-radius:12px;
+  box-shadow:var(--shadow-lg);font-size:14px;font-weight:600;
+  z-index:200;transition:transform .3s cubic-bezier(.4,0,.2,1);
+  display:flex;align-items:center;gap:10px;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--success)}
+.toast.error{background:var(--danger)}
+
+/* footer */
+.site-footer{
+  text-align:center;padding:30px 20px;
+  font-size:12px;color:var(--text-secondary);
+  border-top:1px solid var(--line);
+  margin-top:40px;
+}
+.site-footer a{color:var(--gold-700);text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="bg-decor"></div>
+
+<!-- ============ Student App ============ -->
+<div id="studentApp" class="app">
+  <header class="brand-header">
+    <div class="brand" onclick="handleLogoClick()">
+      <div class="brand-logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="9" y1="13" x2="13" y2="13"/><line x1="9" y1="17" x2="11" y2="17"/><path d="M16.5 8.5l3 3-5 5h-3v-3l5-5z" fill="currentColor" fill-opacity="0.15"/></svg></div>
+      </div>
+      <div class="brand-name">خالد المالكي<span>للاستشارات والتخطيط الشخصي</span></div>
+    </div>
+  </header>
+  <div class="container">
+    <div id="screenContainer"></div>
+  </div>
+  <footer class="site-footer">
+    <p>© ٢٠٢٦ خالد المالكي للاستشارات والتخطيط الشخصي</p>
+  </footer>
+</div>
+
+<!-- ============ Login Screen ============ -->
+<div id="loginScreen" style="display:none" class="dash-body">
+  <div class="login-screen">
+    <div class="login-card">
+      <div class="brand-logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="9" y1="13" x2="13" y2="13"/><line x1="9" y1="17" x2="11" y2="17"/><path d="M16.5 8.5l3 3-5 5h-3v-3l5-5z" fill="currentColor" fill-opacity="0.15"/></svg></div>
+      </div>
+      <h2>دخول المستشار</h2>
+      <p>الوصول مقيّد لخالد المالكي فقط</p>
+      <div class="form-group" style="margin-bottom:14px">
+        <input type="password" class="input" id="loginPassword" placeholder="كلمة المرور" onkeypress="if(event.key==='Enter')doLogin()"/>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="doLogin()">دخول</button>
+      <button class="btn btn-ghost" onclick="exitLogin()" style="margin-top:8px;width:100%">العودة للموقع</button>
+      <p id="loginError" style="color:var(--danger);font-size:13px;margin-top:14px;display:none">كلمة المرور غير صحيحة</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ Dashboard ============ -->
+<div id="dashboardApp" style="display:none" class="dash-body">
+  <header class="dash-header">
+    <div class="brand">
+      <div class="brand-logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="9" y1="13" x2="13" y2="13"/><line x1="9" y1="17" x2="11" y2="17"/><path d="M16.5 8.5l3 3-5 5h-3v-3l5-5z" fill="currentColor" fill-opacity="0.15"/></svg></div>
+      </div>
+      <div class="brand-name">خالد المالكي<span>لوحة المستشار</span></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="dash-link" onclick="logout()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        خروج
+      </button>
+    </div>
+  </header>
+
+  <div class="dash-container">
+    <h1 class="dash-title">جلسات الطلاب <span class="chip" id="dashCount">٠</span></h1>
+    <p class="dash-subtitle">جميع الطلبات والملفات الواردة قبل الجلسة - مرتبة بالأحدث</p>
+
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <div class="dash-toolbar">
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍 ابحث باسم الطالب أو رقم الجوال..." oninput="renderDashboard()">
+      <button class="filter-pill active" data-filter="all" onclick="setFilter(this,'all')">الكل</button>
+      <button class="filter-pill" data-filter="general" onclick="setFilter(this,'general')">عامة</button>
+      <button class="filter-pill" data-filter="planning" onclick="setFilter(this,'planning')">تخطيط</button>
+      <button class="filter-pill" data-filter="upcoming" onclick="setFilter(this,'upcoming')">⏰ قريبة</button>
+    </div>
+
+    <div id="sessionsGrid"></div>
+  </div>
+</div>
+
+<!-- ============ Detail Modal ============ -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>تفاصيل الجلسة</h2>
+      <button class="modal-close" onclick="closeModal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+  </div>
+</div>
+
+<!-- ============ Confirm Modal ============ -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal confirm-modal">
+    <div class="modal-body">
+      <div class="confirm-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+        </svg>
+      </div>
+      <h3>تأكيد الحذف</h3>
+      <p id="confirmText">هل أنت متأكد من حذف هذه الجلسة؟ لا يمكن التراجع.</p>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-secondary" style="flex:1" onclick="closeConfirm()">إلغاء</button>
+        <button class="btn btn-danger" style="flex:1" id="confirmBtn">حذف نهائي</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===========================================================
+   منصة خالد المالكي v3
+   - Light theme dashboard
+   - Personal branding
+   - DISC personality test (proper)
+   - 12-hour time picker (5pm-11pm)
+   - Hidden admin login (#admin)
+   - Smart analysis + PDF export
+   =========================================================== */
+
+const ADMIN_PASSWORD = 'Aa0531660823@';
+const STORAGE_KEY = 'khalid_sessions_v3';
+const NOTES_KEY = 'khalid_notes_v3';
+const AUTH_KEY = 'khalid_auth_v3';
+
+const state = {
+  step: 'welcome',
+  data: {},
+  planningStep: 0,
+  filter: 'all',
+};
+
+/* === DISC Test - 20 questions, 5 per type === */
+const discQuestions = [
+  // D - Dominance (قيادي)
+  { text: "أحب أن آخذ زمام المبادرة في المواقف الجديدة", type: "D" },
+  { text: "أتخذ قراراتي بسرعة وثقة", type: "D" },
+  { text: "أستمتع بالتحديات الصعبة وأبحث عنها", type: "D" },
+  { text: "لا أتراجع أمام الخلافات وأواجهها مباشرة", type: "D" },
+  { text: "أركّز على تحقيق النتائج أكثر من العملية نفسها", type: "D" },
+
+  // I - Influence (اجتماعي/مؤثر)
+  { text: "أستمتع بمقابلة أشخاص جدد وبدء محادثات", type: "I" },
+  { text: "أعبّر عن مشاعري وأفكاري بحماس", type: "I" },
+  { text: "أُجيد إقناع الآخرين والتأثير عليهم", type: "I" },
+  { text: "أحب العمل ضمن مجموعات وفرق", type: "I" },
+  { text: "أنا متفائل بطبعي وأنشر الإيجابية", type: "I" },
+
+  // S - Steadiness (داعم/ثابت)
+  { text: "أفضّل الاستقرار والروتين على التغيير المفاجئ", type: "S" },
+  { text: "أنا مستمع جيد وأتعاطف مع مشاعر الآخرين", type: "S" },
+  { text: "أساعد الآخرين دون أن أنتظر مقابلاً", type: "S" },
+  { text: "أتحلّى بالصبر حتى في المواقف الصعبة", type: "S" },
+  { text: "أتجنّب الصراعات وأسعى للتوافق", type: "S" },
+
+  // C - Conscientiousness (تحليلي/منظم)
+  { text: "أهتم بالتفاصيل الدقيقة في كل ما أقوم به", type: "C" },
+  { text: "أحلّل المعلومات بعمق قبل اتخاذ القرار", type: "C" },
+  { text: "أفضّل القواعد والإجراءات الواضحة", type: "C" },
+  { text: "أراجع عملي بدقة وأسعى للكمال", type: "C" },
+  { text: "أعتمد على الحقائق والأرقام أكثر من المشاعر", type: "C" },
+];
+
+const discNames = {
+  D: "القيادي (السائد)",
+  I: "الاجتماعي (المؤثر)",
+  S: "الداعم (الثابت)",
+  C: "التحليلي (الدقيق)"
+};
+
+const discDescriptions = {
+  D: "شخصية قيادية بطبعها، تحب النتائج والإنجاز السريع. تتميز بالحسم، الثقة، والمبادرة. تبدع في القيادة وإدارة المشاريع واتخاذ القرارات الصعبة. قد يحتاج إلى تعلّم الصبر والاستماع.",
+  I: "شخصية اجتماعية مؤثرة، تستمد طاقتها من التفاعل مع الناس. تتميز بالحماس، التفاؤل، والقدرة على الإقناع. تبدع في المبيعات، التدريب، والعلاقات العامة. قد يحتاج إلى تعزيز التركيز على التفاصيل.",
+  S: "شخصية داعمة هادئة، تقدّر الاستقرار والعلاقات الإنسانية. تتميز بالصبر، التعاطف، والإخلاص. تبدع في العمل الجماعي، خدمة الآخرين، والمهن المساندة. قد يحتاج إلى تعلّم قول 'لا' وتقبّل التغيير.",
+  C: "شخصية تحليلية دقيقة، تحب الفهم العميق والمعلومات الصحيحة. تتميز بالمنطق، الدقة، والاهتمام بالجودة. تبدع في الأبحاث، التحليل، والمهن التي تتطلب دقة. قد يحتاج إلى تجاوز الكمالية واتخاذ قرارات أسرع."
+};
+
+const discKeywords = {
+  D: ["مباشر", "حاسم", "قيادي", "نتائجي", "مبادر"],
+  I: ["متحمس", "اجتماعي", "مؤثر", "متفائل", "ودود"],
+  S: ["صبور", "داعم", "وفي", "متعاطف", "هادئ"],
+  C: ["دقيق", "منظم", "محلل", "منطقي", "حذر"]
+};
+
+const likertQuestions = [
+  "أحب التفكير العميق في الأمور",
+  "أعبّر عن نفسي ومشاعري بسهولة",
+  "أستطيع تنظيم وقتي بشكل جيد",
+  "أحب التحديات وأبحث عنها",
+  "أتعلم من تجاربي وأخطائي",
+  "أعرف أهدافي بوضوح في الحياة",
+  "أتقبّل النقد البنّاء",
+  "أتحمّل المسؤولية في الأعمال الموكلة لي",
+  "أستطيع التركيز لفترات طويلة",
+  "أتواصل مع الآخرين بسهولة",
+  "أبادر بالعمل دون انتظار",
+  "أتعامل مع الضغط والتوتر بهدوء",
+  "أبحث عن المعرفة باستمرار",
+  "أحترم وقت الآخرين والمواعيد",
+  "أؤمن بقدراتي وأثق بنفسي",
+  "أساعد الآخرين بدون مقابل",
+  "أخطط قبل اتخاذ القرارات المهمة",
+  "أكمل ما أبدأه ولا أستسلم بسهولة",
+  "أتأقلم مع التغييرات بمرونة",
+  "أراجع نفسي وأقيّم سلوكي بانتظام"
+];
+
+const goalDomains = [
+  { key: 'faith',    label: 'إيماني',  icon: '☪' },
+  { key: 'science',  label: 'علمي',     icon: '✎' },
+  { key: 'skill',    label: 'مهاري',    icon: '⚒' },
+  { key: 'money',    label: 'مالي',     icon: '◈' },
+  { key: 'sport',    label: 'رياضي',    icon: '⚡' },
+  { key: 'culture',  label: 'ثقافي',    icon: '⌘' },
+  { key: 'other',    label: 'أخرى',     icon: '✦' },
+];
+
+const ICON = {
+  arrow: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
+  arrowR: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>',
+  check: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  pdf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13h6M9 17h6"/></svg>',
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+  mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+};
+
+const $ = sel => document.querySelector(sel);
+const screenC = () => $('#screenContainer');
+
+function render(html){
+  const c = screenC();
+  c.innerHTML = html;
+  c.firstElementChild?.classList.add('fade-in');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function showToast(msg, type=''){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+/* === Welcome === */
+function showWelcome(){
+  state.step = 'welcome';
+  state.data = {};
+  state.planningStep = 0;
+  render(`
+    <section class="hero">
+      <div class="hero-ornament">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="9" y1="13" x2="13" y2="13"/><line x1="9" y1="17" x2="11" y2="17"/><path d="M16.5 8.5l3 3-5 5h-3v-3l5-5z" fill="currentColor" fill-opacity="0.15"/></svg></div>
+      </div>
+      <span class="hero-eyebrow">خالد المالكي</span>
+      <h1>خلّنا <em>نفهمك</em> قبل ما نجلس معك</h1>
+      <p>منصة شخصية تجمع بياناتك وتحلّلها قبل الجلسة، حتى يكون لقاؤنا أعمق وأكثر فائدة في وقت أقل.</p>
+      <button class="btn btn-primary" onclick="startSession()">
+        ابدأ الجلسة ${ICON.arrow}
+      </button>
+    </section>
+
+    <div class="card" style="margin-top:30px">
+      <div style="display:grid;gap:18px">
+        ${[
+          ['١','أدخل بياناتك','دقائق قليلة لتعريف نفسك واختيار نوع الاستشارة.'],
+          ['٢','أكمل التقييم','أسئلة بسيطة تساعدني أفهم شخصيتك وأهدافك.'],
+          ['٣','احجز موعدك','اختر الموعد المناسب وسيصلني ملفك تلقائياً.'],
+        ].map(([n,t,d])=>`
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:38px;height:38px;border-radius:10px;background:rgba(233,196,106,.18);display:grid;place-items:center;flex-shrink:0;color:var(--gold-700);font-weight:800">${n}</div>
+            <div>
+              <h4 style="font-weight:700;color:var(--navy-900);margin-bottom:3px">${t}</h4>
+              <p style="font-size:13.5px;color:var(--text-secondary);line-height:1.6">${d}</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `);
+}
+
+function progressBar(current, total, title){
+  return `
+    <div class="progress-wrap">
+      <div class="progress-head">
+        <span class="progress-step">الخطوة ${arabicNum(current)} من ${arabicNum(total)}</span>
+        <span class="progress-title">${title}</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${(current/total)*100}%"></div></div>
+    </div>`;
+}
+
+function startSession(){
+  state.step = 'basic';
+  render(`
+    ${progressBar(1, 3, 'تعريف بسيط')}
+    <div class="card">
+      <h2 style="font-size:22px;font-weight:800;color:var(--navy-900);margin-bottom:6px">عرّفني على نفسك</h2>
+      <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px">معلوماتك آمنة ولن يطلع عليها سواي.</p>
+
+      <div class="form-group">
+        <label class="form-label">الاسم الكامل <span class="req">*</span></label>
+        <input type="text" class="input" id="f_name" placeholder="مثال: محمد بن عبدالله" value="${state.data.name||''}"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">رقم الجوال <span class="req">*</span></label>
+        <input type="tel" class="input" id="f_phone" placeholder="05xxxxxxxx" dir="ltr" style="text-align:right" value="${state.data.phone||''}"/>
+        <div class="form-hint">سيتم استخدامه للتواصل بشأن الجلسة فقط.</div>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="showWelcome()">${ICON.arrowR} رجوع</button>
+        <button class="btn btn-primary" onclick="goToTypeSelect()">التالي ${ICON.arrow}</button>
+      </div>
+    </div>
+  `);
+}
+
+function goToTypeSelect(){
+  const name = $('#f_name').value.trim();
+  const phone = $('#f_phone').value.trim();
+  if(!name){ showToast('فضلاً أدخل الاسم','error'); return; }
+  if(!phone || phone.length < 9){ showToast('فضلاً أدخل رقم جوال صحيح','error'); return; }
+  state.data.name = name;
+  state.data.phone = phone;
+  showTypeSelect();
+}
+
+function showTypeSelect(){
+  state.step = 'type';
+  render(`
+    ${progressBar(2, 3, 'اختيار نوع الجلسة')}
+    <div class="card">
+      <h2 style="font-size:22px;font-weight:800;color:var(--navy-900);margin-bottom:6px">أي نوع من الاستشارة تحتاج؟</h2>
+      <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px">اختر ما يناسب حالتك حالياً.</p>
+
+      <div class="type-cards">
+        <label class="type-card${state.data.sessionType==='general'?' selected':''}" onclick="pickType(this,'general')">
+          <input type="radio" name="stype" value="general"/>
+          <div class="type-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div class="type-info">
+            <h3>استشارة عامة</h3>
+            <div class="type-desc">لو عندك مشكلة معينة، موضوع يشغلك، أو موقف تحتاج رأي فيه.</div>
+          </div>
+        </label>
+
+        <label class="type-card${state.data.sessionType==='planning'?' selected':''}" onclick="pickType(this,'planning')">
+          <input type="radio" name="stype" value="planning"/>
+          <div class="type-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <div class="type-info">
+            <h3>استشارة تخطيط</h3>
+            <div class="type-desc">لو تبي تبني خطة شخصية، تكتشف نفسك، وترسم مسارك القادم.</div>
+          </div>
+        </label>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="startSession()">${ICON.arrowR} رجوع</button>
+        <button class="btn btn-primary" id="typeNext" onclick="confirmType()" ${!state.data.sessionType?'disabled style="opacity:.5;cursor:not-allowed"':''}>التالي ${ICON.arrow}</button>
+      </div>
+    </div>
+  `);
+}
+
+function pickType(el, type){
+  document.querySelectorAll('.type-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.data.sessionType = type;
+  const btn = $('#typeNext');
+  btn.disabled = false;
+  btn.style.opacity = '1';
+  btn.style.cursor = 'pointer';
+}
+
+function confirmType(){
+  if(!state.data.sessionType) return;
+  if(state.data.sessionType === 'general') startGeneralPath();
+  else startPlanningPath();
+}
+
+/* === General path === */
+function startGeneralPath(){
+  state.step = 'general';
+  if(!state.data.general) state.data.general = {};
+  const g = state.data.general;
+  render(`
+    ${progressBar(3, 3, 'تفاصيل الاستشارة')}
+    <div class="card">
+      <h2 style="font-size:22px;font-weight:800;color:var(--navy-900);margin-bottom:6px">احكِ لي عن استشارتك</h2>
+      <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px">كلما كانت تفاصيلك أوضح، كانت الجلسة أعمق وأنفع.</p>
+
+      <div class="form-group">
+        <label class="form-label">نوع الاستشارة <span class="req">*</span></label>
+        <input type="text" class="input" id="g_topic" placeholder="مثال: قرار التخصص، علاقات، دراسة..." value="${g.topic||''}"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">صف لي الموضوع أو المشكلة <span class="req">*</span></label>
+        <textarea class="textarea" id="g_desc" placeholder="اشرح حالتك بكل تفاصيلها، ما الذي يقلقك؟ منذ متى؟ كيف تؤثر عليك؟">${g.description||''}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">هل سبق واستشرت أحد في هذا الموضوع؟</label>
+        <div class="type-cards" style="grid-template-columns:1fr 1fr">
+          <label class="type-card${g.prevConsult==='yes'?' selected':''}" style="padding:14px" onclick="pickPrev(this,'yes')">
+            <div class="type-info" style="text-align:center;width:100%"><h3 style="font-size:15px">نعم</h3></div>
+          </label>
+          <label class="type-card${g.prevConsult==='no'?' selected':''}" style="padding:14px" onclick="pickPrev(this,'no')">
+            <div class="type-info" style="text-align:center;width:100%"><h3 style="font-size:15px">لا</h3></div>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group" id="prevAnsWrap" style="display:${g.prevConsult==='yes'?'block':'none'}">
+        <label class="form-label">من استشرت؟</label>
+        <input type="text" class="input" id="g_prev_who" placeholder="مثال: والدي، صديق مقرّب، مستشار مدرسة..." value="${g.prevWho||''}" style="margin-bottom:14px"/>
+
+        <label class="form-label">ماذا قالوا لك؟</label>
+        <textarea class="textarea" id="g_prev_ans" placeholder="اذكر النصائح أو الآراء التي سمعتها...">${g.prevAnswer||''}</textarea>
+
+        <label class="form-label" style="margin-top:14px">ما رأيك في كلامهم؟</label>
+        <textarea class="textarea" id="g_prev_view" placeholder="هل اقتنعت بكلامهم؟ هل أضافوا لك شيء؟">${g.prevView||''}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">ما رأيك أنت في الموضوع؟ <span class="req">*</span></label>
+        <textarea class="textarea" id="g_opinion" placeholder="ما الذي تشعر به؟ ما الذي تفكر في فعله؟">${g.opinion||''}</textarea>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="showTypeSelect()">${ICON.arrowR} رجوع</button>
+        <button class="btn btn-primary" onclick="submitGeneral()">إلى الموعد ${ICON.arrow}</button>
+      </div>
+    </div>
+  `);
+}
+
+function pickPrev(el, val){
+  const cards = el.parentElement.querySelectorAll('.type-card');
+  cards.forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.data.general.prevConsult = val;
+  $('#prevAnsWrap').style.display = val === 'yes' ? 'block' : 'none';
+}
+
+function submitGeneral(){
+  const topic = $('#g_topic').value.trim();
+  const desc = $('#g_desc').value.trim();
+  const opinion = $('#g_opinion').value.trim();
+  if(!topic || !desc || !opinion){ showToast('فضلاً أكمل الحقول الأساسية','error'); return; }
+  state.data.general.topic = topic;
+  state.data.general.description = desc;
+  state.data.general.opinion = opinion;
+  if(state.data.general.prevConsult === 'yes'){
+    state.data.general.prevWho = $('#g_prev_who')?.value.trim() || '';
+    state.data.general.prevAnswer = $('#g_prev_ans')?.value.trim() || '';
+    state.data.general.prevView = $('#g_prev_view')?.value.trim() || '';
+  }
+  showAppointment();
+}
+
+/* === Planning Path === */
+function startPlanningPath(){
+  state.step = 'planning';
+  if(!state.data.planning){
+    state.data.planning = {
+      intro:{}, selfTest:{},
+      likert: Array(20).fill(null),
+      disc: Array(20).fill(null),
+      goals:{}
+    };
+  }
+  state.planningStep = 1;
+  showPlanningStep();
+}
+
+function showPlanningStep(){
+  const total = 5;
+  const cur = state.planningStep;
+  const titles = {
+    1:'تعريف شخصي',
+    2:'اعرف نفسك',
+    3:'اختبار التقييم',
+    4:'اختبار نمط الشخصية (DISC)',
+    5:'خطتك الشخصية'
+  };
+  const progress = progressBar(cur, total, titles[cur]);
+  if(cur === 1) renderPlanIntro(progress);
+  else if(cur === 2) renderPlanSelf(progress);
+  else if(cur === 3) renderPlanLikert(progress);
+  else if(cur === 4) renderPlanDISC(progress);
+  else if(cur === 5) renderPlanGoals(progress);
+}
+
+function renderPlanIntro(progress){
+  const p = state.data.planning.intro;
+  render(`
+    ${progress}
+    <div class="card">
+      <h2 style="font-size:22px;font-weight:800;color:var(--navy-900);margin-bottom:6px">عرّفني على نفسك أكثر</h2>
+      <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px">هذه أول خطوة لبناء خطتك الشخصية.</p>
+
+      <div class="form-group">
+        <label class="form-label">اكتب تعريفاً عن نفسك (٣-٥ أسطر) <span class="req">*</span></label>
+        <textarea class="textarea" id="pl_intro" placeholder="من أنت؟ ماذا تدرس؟ ما الذي يميزك؟ ما هواياتك؟" style="min-height:140px">${p.intro||''}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">ما هو طموحك؟ <span class="req">*</span></label>
+        <textarea class="textarea" id="pl_amb" placeholder="حلمك الكبير في الحياة...">${p.ambition||''}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">ماذا تريد أن تكون؟ <span class="req">*</span></label>
+        <textarea class="textarea" id="pl_become" placeholder="بعد ٥ أو ١٠ سنوات، أين ترى نفسك؟">${p.become||''}</textarea>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="showTypeSelect()">${ICON.arrowR} رجوع</button>
+        <button class="btn btn-primary" onclick="savePlanIntro()">التالي ${ICON.arrow}</button>
+      </div>
+    </div>
+  `);
+}
+
+function savePlanIntro(){
+  const intro = $('#pl_intro').value.trim();
+  const amb = $('#pl_amb').value.trim();
+  const become = $('#pl_become').value.trim();
+  if(!intro || !amb || !become){ showToast('فضلاً أكمل جميع الحقول','error'); return; }
+  state.data.planning.intro = { intro, ambition:amb, become };
+  state.planningStep = 2;
+  showPlanningStep();
+}
+
+function renderPlanSelf(progress){
+  const s = state.data.planning.selfTest;
+  const inputArea = (id, label, ph, val='') => `
+    <div class="form-group">
+      <label class="form-label">${label}</label>
+      <textarea class="textarea" id="${id}" placeholder="${ph}" style="min-height:80px">${val||''}</textarea>
+    </div>`;
+  render(`
+    ${progress}
+    <div class="card">
+      <h2 style="font-size:22px;font-weight:800;color:var(--navy-900);margin-bottom:6px">اختبار معرفة الذات</h2>
+      <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px">كن صادقاً مع نفسك، فالإجابة الصادقة تنير الطريق.</p>
+
+      ${inputArea('s_strong','نقاط قوتك (اذكر ٣)','مثال: الانضباط، التواصل، التعلم السريع', s.strengths)}
+      ${inputArea('s_weak','نقاط ضعفك (اذكر ٣)','اذكر ٣ نقاط بصراحة...', s.weaknesses)}
+      ${inputArea('s_goals','أهدافك (اذكر ٣)','ما الذي تريد تحقيقه فعلاً؟', s.goals)}
+      ${inputArea('s_passion','مجالات شغفك','ما الذي يحرّكك ويشعلك؟', s.passions)}
+      ${inputArea('s_inspire','مصادر الإلهام','أشخاص، كتب، تجارب...', s.inspiration)}
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="goPlanBack(1)">${ICON.arrowR} رجوع</button>
+        <button class="btn btn-primary" onclick="savePlanSelf()">التالي ${ICON.arrow}</button>
+      </div>
+    </div>
+  `);
+}
+
+function savePlanSelf(){
+  state.data.planning.selfTest = {
+    strengths: $('#s_strong').value.trim(),
+    weaknesses: $('#s_weak').value.trim(),
+    goals: $('#s_goals').value.trim(),
+    passions: $('#s_passion').value.trim(),
+    inspiration: $('#s_inspire').value.trim(),
+  };
+  if(!state.data.planning.selfTest.strengths || !state.data.planning.selfTest.weaknesses){
+    showToast('فضلاً أكمل نقاط القوة والضعف على الأقل','error'); return;
+  }
+  state.planningStep = 3;
+  showPlanningStep();
+}
+
+function renderPlanLikert(progress){
+  const labels = ['غير موافق بشدة','غير موافق','محايد','موافق','موافق بشدة'];
+  const stored = state.data.planning.likert;
+  let qHtml = '';
+  likertQuestions.forEach((q,i)=>{
+    const opts = labels.map((lbl,idx)=>{
+      const val = idx+1;
+      const sel = stored[i] === val ? ' selected' : '';
+      return `<div class="likert-opt${sel}" data-q="${i}" data-v="${val}" onclick="pickLikert(${i},${val})">
+        ${lbl}<span class="likert-num">${arabicNum(val)}</span>
+      </div>`;
+    }).join('');
+    qHtml += `
+      <div class="likert-q">
+        <div class="likert-text">${arabicNum(i+1)}. ${q}</div>
+        <div class="likert-options">${opts}</div>
+      </div>`;
+  });
+
+  render(`
+    ${progress}
+    <div class="card">
+      <h2 style="font-size:22px;font-weight:800;color:var(--navy-900);margin-bottom:6px">اختبار التقييم الذاتي</h2>
+      <p style="color:var(--text-secondary);font-size:14px;margin-bottom:6px">٢٠ سؤال - اختر ما يصفك بصدق</p>
+      <div style="font-size:12px;color:var(--gold-700);margin-bottom:24px;font-weight:600" id="likertCount">٠ من ٢٠ مكتمل</div>
+
+      ${qHtml}
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="goPlanBack(2)">${ICON.arrowR} رجوع</button>
+        <button class="btn btn-primary" onclick="savePlanLikert()">التالي ${ICON.arrow}</button>
+      </div>
+    </div>
+  `);
+  updateLikertCount();
+}
+
+function pickLikert(qIdx, val){
+  state.data.planning.likert[qIdx] = val;
+  document.querySelectorAll(`.likert-opt[data-q="${qIdx}"]`).forEach(el=>{
+    el.classList.toggle('selected', parseInt(el.dataset.v) === val);
+  });
+  updateLikertCount();
+}
+
+function updateLikertCount(){
+  const filled = state.data.planning.likert.filter(v=>v!==null).length;
+  const el = $('#likertCount');
+  if(el) el.textContent = `${arabicNum(filled)} من ٢٠ مكتمل`;
+}
+
+function savePlanLikert(){
+  const filled = state.data.planning.likert.filter(v=>v!==null).length;
+  if(filled < 20){ showToast(`تبقى ${arabicNum(20-filled)} سؤال`,'error'); return; }
+  state.planningStep = 4;
+  showPlanningStep();
+}
+
+/* === DISC Test (NEW - proper implementation) === */
+function renderPlanDISC(progress){
+  const labels = ['غير موافق بشدة','غير موافق','محايد','موافق','موافق بشدة'];
+  const stored = state.data.planning.disc;
+  let qHtml = '';
+  discQuestions.forEach((q,i)=>{
+    const opts = labels.map((lbl,idx)=>{
+      const val = idx+1;
+      const sel = stored[i] === val ? ' selected' : '';
+      return `<div class="likert-opt${sel}" data-q="${i}" data-v="${val}" onclick="pickDISC(${i},${val})">
+        ${lbl}<span class="likert-num">${arabicNum(val)}</span>
+      </div>`;
+    }).join('');
+    qHtml += `
+      <div class="disc-q">
+        <span class="disc-q-num">${arabicNum(i+1)}/٢٠</span>
+        <div class="disc-text">${q.text}</div>
+        <div class="likert-options">${opts}</div>
+      </div>`;
+  });
+
+  render(`
+    ${progress}
+    <div class="card">
+      <h2 style="font-size:22px;font-weight:800;color:var(--navy-900);margin-bottom:6px">اختبار نمط الشخصية</h2>
+      <p style="color:var(--text-secondary);font-size:14px;margin-bottom:6px">قيّم كل عبارة من ١ (غير موافق بشدة) إلى ٥ (موافق بشدة) - مبني على نموذج DISC العالمي</p>
+      <div style="font-size:12px;color:var(--gold-700);margin-bottom:24px;font-weight:600" id="discCount">٠ من ٢٠ مكتمل</div>
+
+      ${qHtml}
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="goPlanBack(3)">${ICON.arrowR} رجوع</button>
+        <button class="btn btn-primary" onclick="savePlanDISC()">التالي ${ICON.arrow}</button>
+      </div>
+    </div>
+  `);
+  updateDISCCount();
+}
+
+function pickDISC(qIdx, val){
+  state.data.planning.disc[qIdx] = val;
+  // كل سؤال له صف خاص فيه - استخدم الصف بدل ال selector العام
+  const row = document.querySelectorAll('.disc-q')[qIdx];
+  if(row){
+    row.querySelectorAll('.likert-opt').forEach(el=>{
+      el.classList.toggle('selected', parseInt(el.dataset.v) === val);
+    });
+  }
+  updateDISCCount();
+}
+
+function updateDISCCount(){
+  const filled = state.data.planning.disc.filter(v=>v!==null).length;
+  const el = $('#discCount');
+  if(el) el.textContent = `${arabicNum(filled)} من ٢٠ مكتمل`;
+}
+
+function savePlanDISC(){
+  const filled = state.data.planning.disc.filter(v=>v!==null).length;
+  if(filled < 20){ showToast(`تبقى ${arabicNum(20-filled)} سؤال`,'error'); return; }
+  state.planningStep = 5;
+  showPlanningStep();
+}
+
+function renderPlanGoals(progress){
+  const g = state.data.planning.goals;
+  const rows = goalDomains.map(d=>`
+    <div class="goal-row">
+      <div class="goal-label">
+        <div class="goal-icon">${d.icon}</div>
+        ${d.label}
+      </div>
+      <textarea data-key="${d.key}" placeholder="اكتب أهدافك في الجانب ${d.label}...">${g[d.key]||''}</textarea>
+    </div>
+  `).join('');
+
+  render(`
+    ${progress}
+    <div class="card">
+      <h2 style="font-size:22px;font-weight:800;color:var(--navy-900);margin-bottom:6px">خطتك الشخصية</h2>
+      <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px">اكتب أهدافك في كل مجال (سيمكنك تحميلها كملف PDF بعد الإرسال).</p>
+
+      <div class="goals-grid">${rows}</div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="goPlanBack(4)">${ICON.arrowR} رجوع</button>
+        <button class="btn btn-primary" onclick="savePlanGoals()">إلى الموعد ${ICON.arrow}</button>
+      </div>
+    </div>
+  `);
+}
+
+function savePlanGoals(){
+  document.querySelectorAll('.goal-row textarea').forEach(t=>{
+    state.data.planning.goals[t.dataset.key] = t.value.trim();
+  });
+  showAppointment();
+}
+
+function goPlanBack(step){
+  if(state.planningStep === 2){
+    state.data.planning.selfTest = {
+      strengths: $('#s_strong')?.value.trim()||'',
+      weaknesses: $('#s_weak')?.value.trim()||'',
+      goals: $('#s_goals')?.value.trim()||'',
+      passions: $('#s_passion')?.value.trim()||'',
+      inspiration: $('#s_inspire')?.value.trim()||'',
+    };
+  } else if(state.planningStep === 5){
+    document.querySelectorAll('.goal-row textarea').forEach(t=>{
+      state.data.planning.goals[t.dataset.key] = t.value.trim();
+    });
+  }
+  state.planningStep = step;
+  showPlanningStep();
+}
+
+/* ============================================================
+   APPOINTMENT - New custom picker (5pm-11pm, 12-hour)
+   ============================================================ */
+function showAppointment(){
+  state.step = 'appointment';
+  if(!state.data.appointment) state.data.appointment = {};
+  renderAppointment();
+}
+
+function renderAppointment(){
+  // توليد الأيام (١٤ يوم قادم بدءاً من غد)
+  const days = [];
+  const today = new Date();
+  const dayNames = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const monthNames = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+
+  for(let i=1; i<=14; i++){
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    days.push({
+      date: d.toISOString().split('T')[0],
+      dayName: dayNames[d.getDay()],
+      dayNum: d.getDate(),
+      month: monthNames[d.getMonth()]
+    });
+  }
+
+  // توليد الأوقات (٥م إلى ١١م كل ٣٠ دقيقة)
+  const times = [];
+  for(let h = 17; h <= 23; h++){
+    for(let m = 0; m < 60; m += 30){
+      if(h === 23 && m > 0) break; // آخر موعد ١١:٠٠
+      const display = formatTime12(h, m);
+      const value = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+      times.push({ display, value });
+    }
+  }
+
+  const cur = state.data.appointment;
+
+  const dayPills = days.map(d => `
+    <div class="date-pill${cur.date===d.date?' selected':''}" onclick="pickDate('${d.date}')">
+      <div class="day-name">${d.dayName}</div>
+      <div class="day-num">${arabicNum(d.dayNum)}</div>
+      <div class="day-month">${d.month}</div>
+    </div>
+  `).join('');
+
+  const timeBlock = (times) => times.map(t => `
+    <button type="button" class="time-slot${cur.time===t.value?' selected':''}" onclick="pickTime('${t.value}','${t.display}')">
+      ${t.display}
+    </button>
+  `).join('');
+
+  render(`
+    ${progressBar(1, 1, 'حجز الموعد')}
+    <div class="card">
+      <h2 style="font-size:22px;font-weight:800;color:var(--navy-900);margin-bottom:6px">اختر موعد جلستك</h2>
+      <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px">المواعيد المتاحة من ٥ مساءً إلى ١١ مساءً</p>
+
+      <div class="form-group">
+        <label class="form-label">اختر اليوم <span class="req">*</span></label>
+        <div class="date-pills">${dayPills}</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">اختر الوقت <span class="req">*</span></label>
+        <div class="time-grid">${timeBlock(times)}</div>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="goBackToFlow()">${ICON.arrowR} رجوع</button>
+        <button class="btn btn-primary" onclick="goReview()">مراجعة ${ICON.arrow}</button>
+      </div>
+    </div>
+  `);
+}
+
+function pickDate(date){
+  state.data.appointment.date = date;
+  document.querySelectorAll('.date-pill').forEach(p=>p.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function pickTime(value, display){
+  state.data.appointment.time = value;
+  state.data.appointment.timeDisplay = display;
+  document.querySelectorAll('.time-slot').forEach(s=>s.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function formatTime12(h, m){
+  const period = h >= 12 ? 'م' : 'ص';
+  let hour12 = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+  const hourAr = arabicNum(hour12);
+  const minAr = m === 0 ? '' : `:${arabicNum(m.toString().padStart(2,'0'))}`;
+  return `${hourAr}${minAr} ${period}`;
+}
+
+function goBackToFlow(){
+  if(state.data.sessionType === 'general') startGeneralPath();
+  else { state.planningStep = 5; showPlanningStep(); }
+}
+
+function goReview(){
+  if(!state.data.appointment.date){ showToast('فضلاً اختر اليوم','error'); return; }
+  if(!state.data.appointment.time){ showToast('فضلاً اختر الوقت','error'); return; }
+  showReview();
+}
+
+/* === Review === */
+function showReview(){
+  state.step = 'review';
+  const d = state.data;
+  const dateStr = formatArabicDate(d.appointment.date);
+  const typeAr = d.sessionType === 'general' ? 'استشارة عامة' : 'استشارة تخطيط';
+
+  let blocks = `
+    <div class="review-block">
+      <h4>البيانات الأساسية <button class="edit-btn" onclick="startSession()">تعديل</button></h4>
+      <p><strong>الاسم:</strong> ${escapeHTML(d.name)}</p>
+      <p><strong>الجوال:</strong> <span dir="ltr">${escapeHTML(d.phone)}</span></p>
+      <p><strong>نوع الجلسة:</strong> ${typeAr}</p>
+    </div>
+
+    <div class="review-block">
+      <h4>الموعد <button class="edit-btn" onclick="showAppointment()">تعديل</button></h4>
+      <p><strong>اليوم:</strong> ${dateStr}</p>
+      <p><strong>الوقت:</strong> ${d.appointment.timeDisplay}</p>
+    </div>
+  `;
+
+  if(d.sessionType === 'general'){
+    const g = d.general;
+    blocks += `
+      <div class="review-block">
+        <h4>تفاصيل الاستشارة <button class="edit-btn" onclick="startGeneralPath()">تعديل</button></h4>
+        <p><strong>الموضوع:</strong> ${escapeHTML(g.topic)}</p>
+        <p><strong>الوصف:</strong> ${escapeHTML(truncate(g.description,150))}</p>
+        <p><strong>رأيك:</strong> ${escapeHTML(truncate(g.opinion,150))}</p>
+      </div>`;
+  } else {
+    const p = d.planning;
+    const goalsCount = Object.values(p.goals).filter(v=>v).length;
+    blocks += `
+      <div class="review-block">
+        <h4>التعريف الشخصي <button class="edit-btn" onclick="startPlanningPath();">تعديل</button></h4>
+        <p>${escapeHTML(truncate(p.intro.intro,200))}</p>
+      </div>
+      <div class="review-block">
+        <h4>الاختبارات</h4>
+        <p>✓ تم إكمال اختبار معرفة الذات</p>
+        <p>✓ تم إكمال ٢٠ سؤال تقييم ذاتي</p>
+        <p>✓ تم إكمال اختبار نمط الشخصية DISC</p>
+        <p>✓ تم تعبئة ${arabicNum(goalsCount)} مجال من الأهداف</p>
+      </div>`;
+  }
+
+  render(`
+    <div class="progress-wrap">
+      <div class="progress-head">
+        <span class="progress-step">آخر خطوة</span>
+        <span class="progress-title">مراجعة وإرسال</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:22px;font-weight:800;color:var(--navy-900);margin-bottom:6px">مراجعة بياناتك</h2>
+      <p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px">تأكد من المعلومات قبل الإرسال النهائي.</p>
+
+      ${blocks}
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="showAppointment()">${ICON.arrowR} رجوع</button>
+        <button class="btn btn-primary" onclick="finishSession()">${ICON.check} إرسال نهائي</button>
+      </div>
+    </div>
+  `);
+}
+
+async function finishSession(){
+  const d = state.data;
+  d.submittedAt = new Date().toISOString();
+  d.id = 'KM-' + Date.now().toString(36).toUpperCase();
+
+  if(d.sessionType === 'planning'){
+    d.analysis = analyzePlanningResults(d.planning);
+    d.detailedAnalysis = generateDetailedAnalysis(d);
+  }
+  d.aiSummary = generateAISummary(d);
+  d.emailContent = generateEmailContent(d);
+
+  // إظهار حالة التحميل
+  showToast('جارٍ إرسال طلبك...', '');
+
+  try {
+    // ١. حفظ في Firebase
+    await addSessionToFirebase(d);
+
+    // ٢. إرسال إيميل إشعار لخالد
+    sendEmailNotification(d).then(sent => {
+      if(!sent) console.warn('Email notification failed (but session saved)');
+    });
+
+    // ٣. عرض شاشة النجاح
+    showSuccess();
+  } catch(err){
+    console.error('Save error:', err);
+    showToast('حدث خطأ في الإرسال، حاول مرة أخرى', 'error');
+  }
+}
+
+/* ============================================================
+   ANALYSIS
+   ============================================================ */
+function analyzePlanningResults(planning){
+  // Likert score
+  const total = planning.likert.reduce((sum,v)=>sum+(v||0), 0);
+  const max = 100;
+
+  let level, levelDesc, levelColor;
+  if(total >= 80){ level = 'وعي عالي'; levelDesc = 'يمتلك وعياً ذاتياً عالياً ونضجاً جيداً'; levelColor = '#3a9d6e'; }
+  else if(total >= 60){ level = 'وعي جيد'; levelDesc = 'يمتلك وعياً جيداً مع بعض الجوانب القابلة للتطوير'; levelColor = '#5283bf'; }
+  else if(total >= 40){ level = 'وعي متوسط'; levelDesc = 'وعي متوسط، يحتاج إلى عمل على عدة جوانب'; levelColor = '#d49b3c'; }
+  else if(total >= 20){ level = 'وعي منخفض'; levelDesc = 'وعي منخفض، يحتاج إلى تدخل وتوجيه مكثف'; levelColor = '#e07b3c'; }
+  else { level = 'وعي ضعيف جداً'; levelDesc = 'يحتاج إلى دعم وتوجيه شامل'; levelColor = '#c95252'; }
+
+  // === DISC Analysis - الجديد والصحيح ===
+  // كل نمط له ٥ أسئلة، الحد الأقصى ٢٥ نقطة لكل نمط
+  const discScores = { D:0, I:0, S:0, C:0 };
+  discQuestions.forEach((q, i) => {
+    if(planning.disc[i] !== null){
+      discScores[q.type] += planning.disc[i];
+    }
+  });
+
+  const discTotal = discScores.D + discScores.I + discScores.S + discScores.C;
+  const discPercents = {
+    D: Math.round((discScores.D / discTotal) * 100),
+    I: Math.round((discScores.I / discTotal) * 100),
+    S: Math.round((discScores.S / discTotal) * 100),
+    C: Math.round((discScores.C / discTotal) * 100),
+  };
+
+  // ترتيب الأنماط من الأعلى للأقل
+  const sortedDisc = Object.entries(discScores).sort((a,b) => b[1] - a[1]);
+  const dominantType = sortedDisc[0][0];
+  const secondaryType = sortedDisc[1][1] >= sortedDisc[0][1] * 0.85 ? sortedDisc[1][0] : null;
+
+  // المحاور الفرعية من Likert
+  const focus = planning.likert[8] || 0;
+  const stress = planning.likert[11] || 0;
+  const planning_skill = planning.likert[16] || 0;
+  const persistence = planning.likert[17] || 0;
+  const adaptability = planning.likert[18] || 0;
+  const expression = planning.likert[1] || 0;
+  const time_mgmt = planning.likert[2] || 0;
+  const goals_clarity = planning.likert[5] || 0;
+  const initiative = planning.likert[10] || 0;
+  const self_review = planning.likert[19] || 0;
+
+  const stressManagement = stress >= 4 ? 'هادئ تحت الضغط، يتعامل بنضج' : stress >= 3 ? 'متوسط - يحتاج أدوات لإدارة الضغط' : 'يتأثر بالضغط، يحتاج تدريب على الاسترخاء والتنفس';
+  const learningStyle = focus >= 4 ? 'تركيز عميق ومستمر، يفضل المهام الطويلة' : focus >= 3 ? 'تركيز متوسط، يحتاج فترات راحة' : 'تركيز قصير، يفضل تنويع المهام والمكافآت السريعة';
+
+  const indexed = planning.likert.map((v,i)=>({v,i,q:likertQuestions[i]}));
+  const sorted = [...indexed].sort((a,b)=>b.v-a.v);
+  const top3 = sorted.slice(0,3).map(x=>x.q);
+  const bottom3 = sorted.slice(-3).reverse().map(x=>x.q);
+
+  return {
+    score: total,
+    maxScore: max,
+    percentage: Math.round((total/max)*100),
+    level, levelDesc, levelColor,
+    disc: {
+      scores: discScores,
+      percents: discPercents,
+      dominantType,
+      dominantName: discNames[dominantType],
+      secondaryType,
+      secondaryName: secondaryType ? discNames[secondaryType] : null,
+      maxPerType: 25,
+    },
+    stressManagement,
+    learningStyle,
+    metrics: {
+      focus, stress, planning_skill, persistence, adaptability,
+      expression, time_mgmt, goals_clarity, initiative, self_review
+    },
+    keyTraits: { top: top3, bottom: bottom3 },
+  };
+}
+
+function generateDetailedAnalysis(d){
+  const a = d.analysis;
+  const p = d.planning;
+  const m = a.metrics;
+  const disc = a.disc;
+
+  // 1. ملف الشخصية الجديد بناءً على DISC
+  let personalityProfile = `الطالب ${d.name} يحمل نمط شخصية ${disc.dominantName} كنمط أساسي بنسبة ${arabicNum(disc.percents[disc.dominantType])}٪`;
+  if(disc.secondaryType){
+    personalityProfile += `، مع نمط ثانوي قوي ${disc.secondaryName} بنسبة ${arabicNum(disc.percents[disc.secondaryType])}٪، وهذا يعني توازناً جيداً بين النمطين يمنحه مرونة في التعامل`;
+  }
+  personalityProfile += `. ${discDescriptions[disc.dominantType]}`;
+
+  // 2. مستوى الوعي
+  let awarenessAnalysis = '';
+  if(a.percentage >= 80){
+    awarenessAnalysis = `يُظهر الطالب مستوى وعي ذاتي ممتاز (${arabicNum(a.percentage)}٪)، حيث يمتلك صورة واضحة عن ذاته، أهدافه، نقاط قوته وضعفه. هذا المستوى من النضج يتيح للجلسة أن تركز على التطوير والتقدم بدلاً من بناء الأساسيات. يُتوقع تجاوب عالٍ مع الخطط طويلة المدى.`;
+  } else if(a.percentage >= 60){
+    awarenessAnalysis = `الوعي الذاتي للطالب جيد (${arabicNum(a.percentage)}٪)، لكنه يحتاج إلى تعميق في بعض الجوانب. لديه فهم أساسي لذاته لكن قد يكون هناك مناطق غامضة تحتاج إلى استكشاف خلال الجلسة. يُنصح بأسئلة تأملية مفتوحة لتعزيز الوضوح.`;
+  } else if(a.percentage >= 40){
+    awarenessAnalysis = `مستوى الوعي الذاتي متوسط (${arabicNum(a.percentage)}٪) ويُظهر ثغرات في فهم الذات. الطالب يعرف نفسه بشكل سطحي وقد يواجه صعوبة في التعبير عن مشاعره أو تحديد أولوياته. الجلسة الأولى يفضّل أن تركز على بناء الوعي قبل أي خطة عملية.`;
+  } else {
+    awarenessAnalysis = `الوعي الذاتي منخفض (${arabicNum(a.percentage)}٪)، مما يشير إلى احتياج كبير للدعم والتوجيه. الطالب قد يكون في حالة تشتت أو ضياع، ويحتاج إلى مرافقة صبورة تبدأ من الأساسيات: من أنا؟ ماذا أريد؟ ما الذي يهمني فعلاً؟`;
+  }
+
+  // 3. التحليل السلوكي
+  const behaviorPoints = [];
+  if(m.goals_clarity >= 4) behaviorPoints.push('يمتلك وضوحاً جيداً في أهدافه');
+  else if(m.goals_clarity <= 2) behaviorPoints.push('يعاني من ضبابية في الأهداف وعدم وضوح الاتجاه');
+
+  if(m.time_mgmt >= 4) behaviorPoints.push('منظّم في إدارة وقته');
+  else if(m.time_mgmt <= 2) behaviorPoints.push('لديه ضعف في تنظيم الوقت يحتاج معالجة');
+
+  if(m.persistence >= 4) behaviorPoints.push('يكمل ما يبدأ ولا يستسلم بسهولة');
+  else if(m.persistence <= 2) behaviorPoints.push('يميل لترك المهام قبل إتمامها، يحتاج تدريب على الإصرار');
+
+  if(m.initiative >= 4) behaviorPoints.push('مبادر بطبعه ولا ينتظر');
+  else if(m.initiative <= 2) behaviorPoints.push('سلبي في المبادرة، ينتظر التوجيه');
+
+  if(m.expression >= 4) behaviorPoints.push('يعبّر عن نفسه بوضوح');
+  else if(m.expression <= 2) behaviorPoints.push('صعوبة في التعبير عن المشاعر، يحتاج بيئة آمنة في الجلسة');
+
+  if(m.self_review >= 4) behaviorPoints.push('يراجع ذاته بانتظام');
+  else if(m.self_review <= 2) behaviorPoints.push('لا يراجع نفسه، يحتاج لتعلم عادات التأمل الذاتي');
+
+  let behaviorAnalysis = behaviorPoints.length > 0
+    ? `من خلال إجاباته يتضح أنه: ${behaviorPoints.join('، ')}.`
+    : 'يُظهر سمات سلوكية متوازنة دون نقاط متطرفة.';
+
+  // 4. تحليل الأهداف
+  const goalsCount = Object.values(p.goals).filter(v=>v && v.length>5).length;
+  const filledGoals = goalDomains.filter(d=>p.goals[d.key] && p.goals[d.key].length>5).map(d=>d.label);
+  let goalsAnalysis = '';
+  if(goalsCount >= 5){
+    goalsAnalysis = `الطالب يفكر بشمولية حقيقية، حيث وضع أهدافاً في ${arabicNum(goalsCount)} مجالات (${filledGoals.join('، ')}). هذا التنوع يدل على رؤية ناضجة لجوانب الحياة المتعددة، لكن قد يحتاج لتحديد أولويات لتجنب التشتت.`;
+  } else if(goalsCount >= 3){
+    goalsAnalysis = `وضع أهدافاً في ${arabicNum(goalsCount)} مجالات (${filledGoals.join('، ')})، وهو تركيز معقول. يُنصح بمناقشة المجالات التي أهملها وأسباب ذلك.`;
+  } else if(goalsCount > 0){
+    goalsAnalysis = `وضع أهدافاً في ${arabicNum(goalsCount)} مجال فقط (${filledGoals.join('، ')})، ما يكشف عن ضيق في الرؤية أو عدم استيعاب لجوانب أخرى من الحياة. يحتاج توسيع آفاقه.`;
+  } else {
+    goalsAnalysis = `لم يضع الطالب أهدافاً واضحة في الجدول، وهذا في حد ذاته إشارة قوية لحالة التشتت أو عدم الجاهزية للتخطيط. الجلسة يجب أن تركز أولاً على إثارة الأسئلة الكبرى.`;
+  }
+
+  // 5. التوصيات حسب نمط DISC
+  const recommendations = [];
+
+  if(disc.dominantType === 'D'){
+    recommendations.push({ title:'أسلوب التواصل', text:'كن مباشراً ومختصراً، تجنّب الإطالة والمقدمات الطويلة. الطالب يقدّر النتائج والحلول العملية أكثر من التحليل النظري. اطرح خيارات بدلاً من توصيات مباشرة.'});
+  } else if(disc.dominantType === 'I'){
+    recommendations.push({ title:'أسلوب التواصل', text:'استخدم الحوار المفتوح والقصص، الطالب يستجيب للتفاعل العاطفي والحماس. اعترف بمشاعره وأفكاره أولاً قبل تقديم النصح.'});
+  } else if(disc.dominantType === 'S'){
+    recommendations.push({ title:'أسلوب التواصل', text:'كن صبوراً ولا تستعجله في القرارات. الطالب يحتاج إلى وقت للتفكير والشعور بالأمان. أكد له أن التغيير سيكون تدريجياً، وقدّم الدعم العاطفي.'});
+  } else if(disc.dominantType === 'C'){
+    recommendations.push({ title:'أسلوب التواصل', text:'قدّم البيانات والإحصائيات والأمثلة المنطقية، الطالب يحتاج "لماذا" قبل "كيف". تجنّب التعميمات وأعطه وقتاً للتحليل قبل الالتزام بأي خطة.'});
+  }
+
+  // توصية حسب مستوى الوعي
+  if(a.percentage < 50){
+    recommendations.push({ title:'محور الجلسة الأولى', text:'لا تتسرع في وضع خطة. ابدأ بتمارين الوعي الذاتي والأسئلة العميقة (من أنت؟ ماذا تريد فعلاً؟ ما الذي يخيفك؟).'});
+  } else if(a.percentage < 70){
+    recommendations.push({ title:'محور الجلسة الأولى', text:'اربط بين ما يعرفه عن نفسه وما يطمح إليه، اكشف الفجوات بأسئلة موجهة.'});
+  } else {
+    recommendations.push({ title:'محور الجلسة الأولى', text:'انتقل مباشرة لبناء خطة عملية SMART، الطالب جاهز للتنفيذ.'});
+  }
+
+  // توصيات حسب الضغط والإصرار
+  if(m.stress <= 2){
+    recommendations.push({ title:'إدارة الضغط', text:'أعطه أدوات عملية لإدارة التوتر (تنفس، تأمل، تنظيم وقت) قبل أي شيء آخر، فالضغط يعطّل أي خطة.'});
+  }
+  if(m.persistence <= 2){
+    recommendations.push({ title:'بناء الإصرار', text:'ابدأ بأهداف صغيرة جداً وقابلة للقياس أسبوعياً، النجاحات الصغيرة المتكررة ستبني عضلة الإصرار تدريجياً.'});
+  }
+  if(m.goals_clarity <= 2 || goalsCount === 0){
+    recommendations.push({ title:'تجنّب', text:'لا تطلب منه وضع خطة سنوية في الجلسة الأولى، فهو غير جاهز نفسياً. ركّز على ٣ أهداف قصيرة المدى فقط.'});
+  }
+
+  // 6. الخلاصة
+  const summary = `${d.name} طالب يحمل نمط ${disc.dominantName}${disc.secondaryName?` مع لمسة ${disc.secondaryName}`:''} بمستوى وعي ${a.level} (${arabicNum(a.percentage)}٪). ${
+    a.percentage >= 70 ? 'الجلسة معه يمكن أن تكون عملية وتطبيقية.' :
+    a.percentage >= 50 ? 'الجلسة تحتاج توازن بين الفهم والتطبيق.' :
+    'الجلسة الأولى يجب أن تركز على الفهم والاستكشاف، وليس على وضع خطة.'
+  } النقاط الأبرز للعمل عليها: ${a.keyTraits.bottom.slice(0,2).join(' - ')}.`;
+
+  return {
+    summary,
+    personalityProfile,
+    awarenessAnalysis,
+    behaviorAnalysis,
+    goalsAnalysis,
+    recommendations,
+  };
+}
+
+function generateAISummary(data){
+  if(data.sessionType === 'general'){
+    const g = data.general;
+    let sum = `الطالب ${data.name} جاء لاستشارة عامة في موضوع: ${g.topic}. `;
+    sum += g.prevConsult === 'yes' ? 'سبق وأخذ استشارة في الموضوع. ' : 'لم يسبق له الاستشارة. ';
+    sum += `يعبّر عن رأيه بوضوح ويبدو أن لديه ميل لـ ${g.opinion.length > 100 ? 'تحليل عميق' : 'حسم سريع'}. `;
+    sum += 'يحتاج المستشار إلى الاستماع الفعّال أولاً ثم استكشاف الجذور قبل تقديم الحلول.';
+    return sum;
+  }
+  return data.detailedAnalysis?.summary || '';
+}
+
+function generateEmailContent(data){
+  const dateStr = formatArabicDate(data.appointment.date);
+  const typeAr = data.sessionType === 'general' ? 'استشارة عامة' : 'استشارة تخطيط';
+
+  let body = `📋 طلب جلسة استشارية جديد
+═══════════════════════════════════════
+رقم الطلب: ${data.id}
+وقت الإرسال: ${new Date(data.submittedAt).toLocaleString('ar-SA')}
+
+👤 بيانات الطالب:
+الاسم: ${data.name}
+الجوال: ${data.phone}
+نوع الجلسة: ${typeAr}
+
+📅 موعد الجلسة:
+اليوم: ${dateStr}
+الوقت: ${data.appointment.timeDisplay}
+`;
+
+  if(data.sessionType === 'general'){
+    const g = data.general;
+    body += `
+📝 تفاصيل الاستشارة:
+الموضوع: ${g.topic}
+
+الوصف:
+${g.description}
+
+استشارة سابقة: ${g.prevConsult === 'yes' ? 'نعم' : 'لا'}`;
+    if(g.prevConsult === 'yes'){
+      if(g.prevWho) body += `\nمن استشار: ${g.prevWho}`;
+      if(g.prevAnswer) body += `\nما قيل له:\n${g.prevAnswer}`;
+      if(g.prevView) body += `\nرأيه في كلامهم:\n${g.prevView}`;
+    }
+    body += `\n\nرأي الطالب:\n${g.opinion}\n`;
+  } else {
+    const p = data.planning;
+    const a = data.analysis;
+    const da = data.detailedAnalysis;
+    body += `
+✦ تعريف شخصي:
+${p.intro.intro}
+
+طموحه: ${p.intro.ambition}
+يريد أن يكون: ${p.intro.become}
+
+✦ معرفة الذات:
+نقاط القوة: ${p.selfTest.strengths}
+نقاط الضعف: ${p.selfTest.weaknesses}
+الأهداف: ${p.selfTest.goals}
+الشغف: ${p.selfTest.passions}
+الإلهام: ${p.selfTest.inspiration}
+
+✦ نتائج الاختبارات:
+• مستوى الوعي: ${a.level} (${a.score}/${a.maxScore} = ${a.percentage}٪)
+• نمط الشخصية (DISC): ${a.disc.dominantName}${a.disc.secondaryName?` (مع ميول ${a.disc.secondaryName})`:''}
+  - القيادي D: ${a.disc.percents.D}٪
+  - الاجتماعي I: ${a.disc.percents.I}٪
+  - الداعم S: ${a.disc.percents.S}٪
+  - التحليلي C: ${a.disc.percents.C}٪
+• أسلوب التعلم: ${a.learningStyle}
+• إدارة الضغط: ${a.stressManagement}
+
+✦ الخطة الشخصية:`;
+    goalDomains.forEach(d=>{
+      if(p.goals[d.key]) body += `\n${d.label}: ${p.goals[d.key]}`;
+    });
+
+    if(da){
+      body += `\n\n═══════════════════════════════════════
+🤖 التحليل الذكي الشامل:
+═══════════════════════════════════════
+
+▪ الخلاصة:
+${da.summary}
+
+▪ ملف الشخصية:
+${da.personalityProfile}
+
+▪ مستوى الوعي:
+${da.awarenessAnalysis}
+
+▪ التحليل السلوكي:
+${da.behaviorAnalysis}
+
+▪ تحليل الأهداف:
+${da.goalsAnalysis}
+
+▪ توصيات للجلسة:`;
+      da.recommendations.forEach(r=>{
+        body += `\n• ${r.title}: ${r.text}`;
+      });
+    }
+  }
+
+  body += `\n\n═══════════════════════════════════════
+خالد المالكي للاستشارات والتخطيط الشخصي`;
+
+  return body;
+}
+
+/* === Success === */
+function showSuccess(){
+  state.step = 'success';
+  const d = state.data;
+  const dateStr = formatArabicDate(d.appointment.date);
+  const typeAr = d.sessionType === 'general' ? 'استشارة عامة' : 'استشارة تخطيط';
+  const isPlanning = d.sessionType === 'planning';
+
+  render(`
+    <div class="success-screen">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6 9 17l-5-5"/>
+        </svg>
+      </div>
+      <h2>تم استلام طلبك بنجاح ✨</h2>
+      <p>وصلت بياناتك لخالد، وسيقوم بمراجعتها قبل موعد جلستك. سنتواصل معك قريباً للتأكيد.</p>
+
+      <div class="success-summary">
+        <div><strong>رقم الطلب</strong> <span style="font-family:monospace">${d.id}</span></div>
+        <div><strong>الاسم</strong> <span>${escapeHTML(d.name)}</span></div>
+        <div><strong>نوع الجلسة</strong> <span>${typeAr}</span></div>
+        <div><strong>اليوم</strong> <span>${dateStr}</span></div>
+        <div><strong>الوقت</strong> <span>${d.appointment.timeDisplay}</span></div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-direction:column;margin-top:24px">
+        ${isPlanning ? `
+          <button class="btn btn-gold" onclick="downloadStudentPlanPDF()">
+            ${ICON.pdf} عرض خطتي الشخصية وحفظها
+          </button>
+        ` : ''}
+        <button class="btn btn-secondary" onclick="showWelcome()">العودة للرئيسية</button>
+      </div>
+
+      <p style="font-size:12px;color:var(--text-secondary);margin-top:24px;line-height:1.7;background:rgba(58,157,110,.08);padding:14px;border-radius:10px;border:1px dashed var(--success)">
+        ✓ تم إرسال جميع تفاصيلك للمستشار تلقائياً، وسيتواصل معك قريباً.
+      </p>
+
+      ${isPlanning ? `
+        <p style="font-size:12px;color:var(--text-secondary);margin-top:14px;line-height:1.7;background:rgba(233,196,106,.08);padding:14px;border-radius:10px;border:1px dashed var(--gold-500)">
+          💡 خطتك الشخصية ستفتح في نافذة جديدة، يمكنك حفظها كملف PDF أو طباعتها.
+        </p>
+      ` : ''}
+    </div>
+  `);
+}
+
+/* === PDF Generation - عبر نافذة الطباعة (الأكثر موثوقية) === */
+function downloadStudentPlanPDF(){
+  const d = state.data;
+  if(d.sessionType !== 'planning') return;
+
+  const dateStr = formatArabicDate(d.appointment.date);
+  const p = d.planning;
+  const todayStr = new Date().toLocaleDateString('ar-SA');
+
+  const goalsRows = goalDomains.map(dom => `
+    <tr>
+      <td class="goal-domain">${dom.icon} &nbsp; ${dom.label}</td>
+      <td class="goal-content">
+        ${p.goals[dom.key] ? escapeHTML(p.goals[dom.key]).replace(/\n/g,'<br>') : '<span style="color:#bbb">—</span>'}
+      </td>
+    </tr>
+  `).join('');
+
+  const selfTestBlocks = [
+    ['نقاط قوتي', p.selfTest.strengths, '✓', '#3a9d6e'],
+    ['نقاط ضعفي', p.selfTest.weaknesses, '!', '#c95252'],
+    ['أهدافي', p.selfTest.goals, '◎', '#234a85'],
+    ['شغفي', p.selfTest.passions, '♥', '#b8862a'],
+    ['مصادر إلهامي', p.selfTest.inspiration, '✦', '#d4a23c'],
+  ].filter(([,v])=>v).map(([label, val, icon, color])=>`
+    <div class="self-block" style="border-right-color:${color}">
+      <strong style="color:${color}">${icon} ${label}:</strong>
+      <p>${escapeHTML(val).replace(/\n/g,'<br>')}</p>
+    </div>
+  `).join('');
+
+  const fullHTML = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>خطتي الشخصية - ${escapeHTML(d.name)}</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Tajawal','Arial',sans-serif;
+    background:#faf6ee;
+    color:#2c3e50;
+    direction:rtl;
+    line-height:1.7;
+    padding:30px;
+  }
+  .page{max-width:780px;margin:0 auto;background:#faf6ee}
+  .header{
+    text-align:center;
+    border-bottom:3px double #b8862a;
+    padding-bottom:20px;
+    margin-bottom:25px;
+  }
+  .logo{
+    display:inline-flex;
+    align-items:center;justify-content:center;
+    width:64px;height:64px;
+    background:linear-gradient(135deg,#234a85,#1a3a6e);
+    border-radius:16px;
+    color:#e9c46a;
+    margin-bottom:10px;
+  }
+  .logo svg{width:32px;height:32px}
+  .header h1{
+    font-size:28px;color:#1a3a6e;
+    margin:8px 0 4px;font-weight:800;
+  }
+  .header .subtitle{
+    font-size:13px;color:#8c6420;
+  }
+  .section{
+    background:white;
+    border:1px solid rgba(212,162,60,.25);
+    border-radius:12px;
+    padding:18px 20px;
+    margin-bottom:18px;
+    page-break-inside:avoid;
+  }
+  .section-title{
+    font-size:13px;
+    color:#8c6420;
+    letter-spacing:1px;
+    margin-bottom:12px;
+    padding-bottom:8px;
+    border-bottom:1px solid rgba(212,162,60,.25);
+    font-weight:700;
+  }
+  .info-table{width:100%;font-size:13px}
+  .info-table td{padding:5px 0;vertical-align:top}
+  .info-table td:first-child{
+    color:#234a85;font-weight:700;width:120px;
+  }
+  .intro-text{
+    font-size:13.5px;
+    line-height:1.9;
+    color:#2c3e50;
+    margin-bottom:12px;
+  }
+  .highlight-box{
+    background:#fdf6e3;
+    padding:10px 14px;
+    border-radius:8px;
+    border-right:3px solid #d4a23c;
+    margin-bottom:8px;
+    font-size:13px;
+  }
+  .highlight-box strong{color:#234a85}
+  .self-block{
+    margin-bottom:10px;
+    padding:10px 14px;
+    background:#faf6ee;
+    border-radius:8px;
+    border-right:3px solid;
+    page-break-inside:avoid;
+  }
+  .self-block strong{font-size:13px;display:block;margin-bottom:4px}
+  .self-block p{
+    font-size:13px;
+    line-height:1.7;
+    color:#2c3e50;
+  }
+  table.goals{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+  }
+  table.goals thead th{
+    background:#234a85;
+    color:white;
+    padding:12px;
+    border:1px solid #234a85;
+    font-weight:700;
+  }
+  table.goals .goal-domain{
+    background:#fdf6e3;
+    font-weight:700;
+    color:#8c6420;
+    width:120px;
+    padding:14px;
+    border:1px solid #d4a23c;
+    text-align:center;
+    font-size:14px;
+  }
+  table.goals .goal-content{
+    padding:14px;
+    border:1px solid #d4a23c;
+    font-size:13px;
+    line-height:1.8;
+    color:#2c3e50;
+    background:white;
+  }
+  .footer{
+    text-align:center;
+    padding-top:18px;
+    border-top:2px solid rgba(212,162,60,.25);
+    color:#8a96a8;
+    font-size:11px;
+    margin-top:20px;
+  }
+  .footer p{margin-bottom:4px}
+
+  @media print{
+    body{padding:0;background:white}
+    .page{padding:0}
+    .section{
+      box-shadow:none;
+      border:1px solid #ddd;
+    }
+    @page{
+      size:A4;
+      margin:15mm;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="header">
+    <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="9" y1="13" x2="13" y2="13"/><line x1="9" y1="17" x2="11" y2="17"/><path d="M16.5 8.5l3 3-5 5h-3v-3l5-5z" fill="currentColor" fill-opacity="0.15"/></svg></div>
+    <h1>خطتي الشخصية</h1>
+    <div class="subtitle">خالد المالكي للاستشارات والتخطيط الشخصي</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">بيانات الطالب</div>
+    <table class="info-table">
+      <tr><td>الاسم:</td><td>${escapeHTML(d.name)}</td></tr>
+      <tr><td>رقم الطلب:</td><td style="font-family:monospace">${d.id}</td></tr>
+      <tr><td>موعد الجلسة:</td><td>${dateStr} - ${d.appointment.timeDisplay}</td></tr>
+      <tr><td>تاريخ التحميل:</td><td>${todayStr}</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">تعريفي بنفسي</div>
+    <p class="intro-text">${escapeHTML(p.intro.intro)}</p>
+    <div class="highlight-box">
+      <strong>طموحي:</strong> ${escapeHTML(p.intro.ambition)}
+    </div>
+    <div class="highlight-box">
+      <strong>أريد أن أكون:</strong> ${escapeHTML(p.intro.become)}
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">معرفة الذات</div>
+    ${selfTestBlocks}
+  </div>
+
+  <div class="section">
+    <div class="section-title">جدول خطتي الشخصية</div>
+    <table class="goals">
+      <thead>
+        <tr>
+          <th style="width:120px">المجال</th>
+          <th>أهدافي</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${goalsRows}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <p>"رحلة الألف ميل تبدأ بخطوة" — احتفظ بهذه الخطة وراجعها كل شهر</p>
+    <p>خالد المالكي © ${new Date().getFullYear()}</p>
+  </div>
+</div>
+
+</body>
+</html>`;
+
+  // === عرض الخطة في مودال + طباعة عبر استبدال محتوى الصفحة مؤقتاً ===
+
+  // استخراج محتوى body فقط من الـHTML الكامل
+  const bodyMatch = fullHTML.match(/<body[^>]*>([\s\S]*?)<\/body>/);
+  const bodyContent = bodyMatch ? bodyMatch[1] : fullHTML;
+
+  // استخراج CSS من القالب
+  const styleMatch = fullHTML.match(/<style>([\s\S]*?)<\/style>/);
+  const styleContent = styleMatch ? styleMatch[1] : '';
+
+  // إنشاء المودال للعرض
+  const planModal = document.createElement('div');
+  planModal.id = 'planPreviewModal';
+  planModal.style.cssText = `
+    position:fixed;inset:0;z-index:9999;
+    background:rgba(0,0,0,.7);
+    display:flex;flex-direction:column;
+    padding:0;
+  `;
+
+  planModal.innerHTML = `
+    <div class="plan-toolbar" style="background:white;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;box-shadow:0 2px 10px rgba(0,0,0,.2);direction:rtl">
+      <div style="font-weight:700;color:#1a3a6e;font-size:16px">📋 خطتي الشخصية - ${escapeHTML(d.name)}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="btnPrintPlan" style="padding:10px 20px;background:linear-gradient(135deg,#d4a23c,#b8862a);color:white;border:none;border-radius:10px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer">🖨️ طباعة / حفظ PDF</button>
+        <button id="btnClosePlan" style="padding:10px 20px;background:#f3ecdc;color:#1a3a6e;border:1px solid #d4a23c40;border-radius:10px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer">إغلاق ✕</button>
+      </div>
+    </div>
+    <div class="plan-hint" style="background:#fdf6e3;padding:10px 20px;font-size:13px;color:#234a85;border-bottom:1px solid #d4a23c40;line-height:1.6;direction:rtl">
+      💡 <strong>لحفظ كملف PDF:</strong> اضغط زر "طباعة / حفظ PDF" → اختر "Save as PDF" أو "حفظ كـ PDF" من نافذة الطباعة.
+    </div>
+    <div id="planContentArea" style="flex:1;overflow:auto;background:#faf6ee;padding:20px;direction:rtl">
+      ${bodyContent}
+    </div>
+  `;
+
+  // إضافة CSS الخاص بالخطة في style منفصل بنطاق محدد
+  const planStyle = document.createElement('style');
+  planStyle.id = 'planPrintStyle';
+  planStyle.textContent = `
+    /* أنماط الخطة - تطبق فقط داخل المودال */
+    #planContentArea { font-family:'Tajawal',Arial,sans-serif; color:#2c3e50; line-height:1.7; }
+    ${styleContent.replace(/body\s*\{/g, '#planContentArea {')}
+
+    /* Print mode - يخفي كل شيء عدا محتوى الخطة */
+    @media print {
+      body * { visibility: hidden !important; }
+      #planContentArea, #planContentArea * { visibility: visible !important; }
+      #planPreviewModal {
+        position: absolute !important;
+        inset: 0 !important;
+        background: white !important;
+        padding: 0 !important;
+      }
+      .plan-toolbar, .plan-hint { display: none !important; }
+      #planContentArea {
+        position: absolute !important;
+        left: 0 !important; top: 0 !important; right: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+        overflow: visible !important;
+      }
+      @page { size: A4; margin: 15mm; }
+    }
+  `;
+  document.head.appendChild(planStyle);
+  document.body.appendChild(planModal);
+
+  // زر الطباعة - استخدام window.print مباشرة (المتصفح يطبع كل الصفحة، والـCSS يخفي الباقي)
+  planModal.querySelector('#btnPrintPlan').onclick = () => {
+    window.print();
+  };
+
+  // زر الإغلاق
+  const closeModal = () => {
+    if(document.body.contains(planModal)) document.body.removeChild(planModal);
+    if(document.head.contains(planStyle)) document.head.removeChild(planStyle);
+    document.removeEventListener('keydown', escHandler);
+  };
+
+  planModal.querySelector('#btnClosePlan').onclick = closeModal;
+
+  // إغلاق بمفتاح ESC
+  const escHandler = (e) => { if(e.key === 'Escape') closeModal(); };
+  document.addEventListener('keydown', escHandler);
+
+  showToast('تم عرض الخطة ✓', 'success');
+}
+
+/* ============================================================
+   STORAGE - Firebase Firestore + Local Cache
+   ============================================================ */
+
+// كاش محلي للجلسات (يُحدّث من Firebase)
+let sessionsCache = [];
+let sessionsLoaded = false;
+
+// تحميل الجلسات من Firebase
+async function loadSessionsFromFirebase(){
+  if(!window.firebaseDB){
+    console.warn('Firebase not ready, using cache');
+    return sessionsCache;
+  }
+  try {
+    const { db, collection, getDocs, query, orderBy } = window.firebaseDB;
+    const q = query(collection(db, 'sessions'), orderBy('submittedAt', 'desc'));
+    const snapshot = await getDocs(q);
+    sessionsCache = [];
+    snapshot.forEach(docSnap => {
+      sessionsCache.push({ ...docSnap.data(), _docId: docSnap.id });
+    });
+    sessionsLoaded = true;
+    return sessionsCache;
+  } catch(e){
+    console.error('Firebase load error:', e);
+    return sessionsCache;
+  }
+}
+
+// إرجاع الجلسات من الكاش (متزامن)
+function getSessions(){
+  return sessionsCache;
+}
+
+// إضافة جلسة جديدة لـ Firebase
+async function addSessionToFirebase(session){
+  if(!window.firebaseDB) throw new Error('Firebase not initialized');
+  const { db, collection, addDoc } = window.firebaseDB;
+  const docRef = await addDoc(collection(db, 'sessions'), session);
+  session._docId = docRef.id;
+  sessionsCache.unshift(session);
+  return session;
+}
+
+// حذف جلسة من Firebase
+async function deleteSessionFromFirebase(docId){
+  if(!window.firebaseDB) throw new Error('Firebase not initialized');
+  const { db, deleteDoc, doc } = window.firebaseDB;
+  await deleteDoc(doc(db, 'sessions', docId));
+  sessionsCache = sessionsCache.filter(s => s._docId !== docId);
+}
+
+// الملاحظات: نخزنها محلياً (لا تحتاج مزامنة)
+function getNotes(id){
+  try {
+    const raw = localStorage.getItem(NOTES_KEY);
+    const all = raw ? JSON.parse(raw) : {};
+    return all[id] || '';
+  } catch { return ''; }
+}
+function saveNote(id, text){
+  try {
+    const raw = localStorage.getItem(NOTES_KEY);
+    const all = raw ? JSON.parse(raw) : {};
+    all[id] = text;
+    localStorage.setItem(NOTES_KEY, JSON.stringify(all));
+  } catch(e){}
+}
+
+/* ============================================================
+   EMAIL SENDING via EmailJS
+   ============================================================ */
+async function sendEmailNotification(session){
+  if(typeof emailjs === 'undefined'){
+    console.warn('EmailJS not loaded');
+    return false;
+  }
+  try {
+    await emailjs.send('service_7g0ugua', 'template_2gd0im7', {
+      student_name: session.name,
+      session_id: session.id,
+      email_body: session.emailContent,
+    });
+    return true;
+  } catch(err){
+    console.error('Email send error:', err);
+    return false;
+  }
+}
+
+/* ============================================================
+   AUTH (Hidden Login)
+   ============================================================ */
+function checkAdminRoute(){
+  const hash = window.location.hash;
+  if(hash === '#admin'){
+    if(sessionStorage.getItem(AUTH_KEY) === 'yes'){
+      openDashboard();
+    } else {
+      showLogin();
+    }
+  }
+}
+
+function showLogin(){
+  $('#studentApp').style.display = 'none';
+  $('#dashboardApp').style.display = 'none';
+  $('#loginScreen').style.display = 'block';
+  setTimeout(() => $('#loginPassword')?.focus(), 100);
+}
+
+function doLogin(){
+  const pwd = $('#loginPassword').value;
+  if(pwd === ADMIN_PASSWORD){
+    sessionStorage.setItem(AUTH_KEY, 'yes');
+    $('#loginError').style.display = 'none';
+    openDashboard();
+  } else {
+    $('#loginError').style.display = 'block';
+    $('#loginPassword').value = '';
+  }
+}
+
+function exitLogin(){
+  $('#loginScreen').style.display = 'none';
+  $('#studentApp').style.display = 'flex';
+  window.location.hash = '';
+  showWelcome();
+}
+
+function logout(){
+  sessionStorage.removeItem(AUTH_KEY);
+  $('#dashboardApp').style.display = 'none';
+  $('#studentApp').style.display = 'flex';
+  window.location.hash = '';
+  showWelcome();
+  showToast('تم تسجيل الخروج', 'success');
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+async function openDashboard(){
+  $('#studentApp').style.display = 'none';
+  $('#loginScreen').style.display = 'none';
+  $('#dashboardApp').style.display = 'block';
+
+  // عرض حالة التحميل
+  $('#sessionsGrid').innerHTML = `
+    <div class="empty-state">
+      <div style="margin-bottom:14px">⏳</div>
+      <h3>جارٍ تحميل الجلسات...</h3>
+      <p>لحظات من فضلك</p>
+    </div>`;
+
+  // تحميل الجلسات من Firebase
+  await loadSessionsFromFirebase();
+  renderDashboard();
+}
+
+function setFilter(btn, filter){
+  document.querySelectorAll('.filter-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  state.filter = filter;
+  renderDashboard();
+}
+
+function isUpcoming(session){
+  const apt = new Date(session.appointment.date + 'T' + session.appointment.time);
+  const now = new Date();
+  const diff = apt - now;
+  return diff > 0 && diff < 24*60*60*1000;
+}
+
+function renderStats(){
+  const all = getSessions();
+  const total = all.length;
+  const general = all.filter(s=>s.sessionType==='general').length;
+  const planning = all.filter(s=>s.sessionType==='planning').length;
+  const upcoming = all.filter(s=>isUpcoming(s)).length;
+
+  $('#statsGrid').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16l7-3 7 3z"/></svg>
+      </div>
+      <div style="clear:both"></div>
+      <div class="stat-num">${arabicNum(total)}</div>
+      <div class="stat-label">إجمالي الجلسات</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div style="clear:both"></div>
+      <div class="stat-num">${arabicNum(general)}</div>
+      <div class="stat-label">استشارات عامة</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      </div>
+      <div style="clear:both"></div>
+      <div class="stat-num">${arabicNum(planning)}</div>
+      <div class="stat-label">استشارات تخطيط</div>
+    </div>
+    <div class="stat-card" style="border-color:${upcoming>0?'var(--gold-500)':'var(--line)'}">
+      <div class="stat-icon" style="background:${upcoming>0?'rgba(233,196,106,.3)':'rgba(233,196,106,.15)'}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div style="clear:both"></div>
+      <div class="stat-num" style="color:${upcoming>0?'var(--gold-700)':'var(--navy-900)'}">${arabicNum(upcoming)}</div>
+      <div class="stat-label">قريبة (٢٤ ساعة)</div>
+    </div>
+  `;
+}
+
+function renderDashboard(){
+  renderStats();
+
+  let sessions = getSessions();
+  const search = $('#searchInput')?.value.trim().toLowerCase() || '';
+
+  if(state.filter === 'general') sessions = sessions.filter(s=>s.sessionType==='general');
+  else if(state.filter === 'planning') sessions = sessions.filter(s=>s.sessionType==='planning');
+  else if(state.filter === 'upcoming') sessions = sessions.filter(s=>isUpcoming(s));
+
+  if(search) sessions = sessions.filter(s =>
+    s.name.toLowerCase().includes(search) || s.phone.includes(search)
+  );
+
+  $('#dashCount').textContent = arabicNum(sessions.length);
+  const grid = $('#sessionsGrid');
+
+  if(sessions.length === 0){
+    grid.className = '';
+    grid.innerHTML = `
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <path d="M3 9h18M9 21V9"/>
+        </svg>
+        <h3>${search || state.filter !== 'all' ? 'لا توجد نتائج' : 'لا توجد جلسات بعد'}</h3>
+        <p>${search || state.filter !== 'all' ? 'جرّب فلترة أو بحثاً مختلفاً' : 'عندما يقدّم الطلاب طلباتهم، ستظهر هنا.'}</p>
+      </div>`;
+    return;
+  }
+
+  const allSessions = getSessions();
+  grid.className = 'sessions-grid';
+  grid.innerHTML = sessions.map(s => {
+    const originalIdx = allSessions.findIndex(x => x.id === s.id);
+    const dateStr = formatArabicDate(s.appointment.date);
+    const typeAr = s.sessionType === 'general' ? 'استشارة عامة' : 'استشارة تخطيط';
+    const tagClass = s.sessionType === 'general' ? 'tag-general' : 'tag-planning';
+    const upcoming = isUpcoming(s);
+    return `
+      <div class="session-card${upcoming?' upcoming':''}">
+        <div onclick="openDetail(${originalIdx})">
+          <span class="session-tag ${tagClass}">${typeAr}</span>
+          <div class="session-name">${escapeHTML(s.name)}</div>
+          <div class="session-phone">${escapeHTML(s.phone)}</div>
+          <div class="session-meta">
+            <span>📅 <strong>${dateStr}</strong> · ${s.appointment.timeDisplay || s.appointment.time}</span>
+            <span>${s.id}</span>
+          </div>
+        </div>
+        <div class="session-actions">
+          <button class="icon-btn" title="عرض" onclick="openDetail(${originalIdx})">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" title="نسخ الإيميل" onclick="event.stopPropagation();copyEmail('${s.id}')">${ICON.copy}</button>
+          <button class="icon-btn" title="إرسال إيميل" onclick="event.stopPropagation();sendDetailEmail('${s.id}')">${ICON.mail}</button>
+          <button class="icon-btn danger" title="حذف" onclick="event.stopPropagation();confirmDelete('${s.id}','${escapeHTML(s.name)}')">${ICON.trash}</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openDetail(idx){
+  const sessions = getSessions();
+  const s = sessions[idx];
+  if(!s) return;
+
+  const dateStr = formatArabicDate(s.appointment.date);
+  const typeAr = s.sessionType === 'general' ? 'استشارة عامة' : 'استشارة تخطيط';
+  const note = getNotes(s.id);
+
+  let html = `
+    <div class="detail-section">
+      <h3>بيانات الطالب</h3>
+      <div class="detail-row"><strong>الاسم:</strong> <span>${escapeHTML(s.name)}</span></div>
+      <div class="detail-row"><strong>الجوال:</strong> <span dir="ltr">${escapeHTML(s.phone)}</span></div>
+      <div class="detail-row"><strong>رقم الطلب:</strong> <span style="font-family:monospace">${s.id}</span></div>
+      <div class="detail-row"><strong>نوع الجلسة:</strong> <span>${typeAr}</span></div>
+      <div class="detail-row"><strong>الموعد:</strong> <span>${dateStr} - ${s.appointment.timeDisplay || s.appointment.time}</span></div>
+    </div>
+  `;
+
+  if(s.sessionType === 'general'){
+    const g = s.general;
+    html += `
+      <div class="detail-section">
+        <h3>تفاصيل الاستشارة</h3>
+        <div class="detail-row"><strong>الموضوع:</strong> <span>${escapeHTML(g.topic)}</span></div>
+        <div style="margin:10px 0">
+          <div style="font-weight:600;color:var(--navy-800);margin-bottom:6px">الوصف:</div>
+          <div class="detail-text">${escapeHTML(g.description)}</div>
+        </div>
+        <div class="detail-row"><strong>استشارة سابقة:</strong> <span>${g.prevConsult==='yes'?'نعم':'لا'}</span></div>
+        ${g.prevWho ? `<div class="detail-row"><strong>من استشار:</strong> <span>${escapeHTML(g.prevWho)}</span></div>` : ''}
+        ${g.prevAnswer ? `<div style="margin:10px 0"><div style="font-weight:600;color:var(--navy-800);margin-bottom:6px">ما قيل له:</div><div class="detail-text">${escapeHTML(g.prevAnswer)}</div></div>` : ''}
+        ${g.prevView ? `<div style="margin:10px 0"><div style="font-weight:600;color:var(--navy-800);margin-bottom:6px">رأيه في كلامهم:</div><div class="detail-text">${escapeHTML(g.prevView)}</div></div>` : ''}
+        <div style="margin:10px 0">
+          <div style="font-weight:600;color:var(--navy-800);margin-bottom:6px">رأي الطالب:</div>
+          <div class="detail-text">${escapeHTML(g.opinion)}</div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>تحليل ذكي</h3>
+        <div class="ai-summary"><p>${escapeHTML(s.aiSummary)}</p></div>
+      </div>
+    `;
+  } else {
+    const p = s.planning;
+    const a = s.analysis;
+    const da = s.detailedAnalysis;
+    const disc = a.disc;
+
+    html += `
+      <div class="detail-section">
+        <h3>التعريف الشخصي</h3>
+        <div class="detail-text" style="margin-bottom:10px">${escapeHTML(p.intro.intro)}</div>
+        <div class="detail-row"><strong>الطموح:</strong> <span>${escapeHTML(p.intro.ambition)}</span></div>
+        <div class="detail-row"><strong>يريد أن يكون:</strong> <span>${escapeHTML(p.intro.become)}</span></div>
+      </div>
+
+      <div class="detail-section">
+        <h3>مستوى الوعي</h3>
+        <div class="score-card">
+          <div>
+            <div class="score-label">مستوى الوعي الذاتي</div>
+            <div class="score-cat">${a.level}</div>
+            <div style="margin-top:6px;font-size:13px;opacity:.8">${a.levelDesc}</div>
+          </div>
+          <div style="text-align:center;position:relative;z-index:1">
+            <div class="score-num">${arabicNum(a.percentage)}<span style="font-size:18px">٪</span></div>
+            <div style="font-size:12px;opacity:.7;margin-top:4px">${arabicNum(a.score)}/${arabicNum(a.maxScore)}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>نتيجة اختبار DISC</h3>
+        <div class="disc-result">
+          <div class="disc-result-header">
+            <h4>نمط الشخصية</h4>
+            <div class="disc-dominant">${disc.dominantName}</div>
+            ${disc.secondaryName ? `<div class="disc-secondary">مع ميول قوية للنمط ${disc.secondaryName}</div>` : ''}
+          </div>
+          <div class="disc-bars">
+            ${['D','I','S','C'].map(t => `
+              <div class="disc-bar-row">
+                <div class="disc-bar-label">
+                  <div class="disc-letter ${t.toLowerCase()}">${t}</div>
+                  <span>${discNames[t].split(' ')[0]}</span>
+                </div>
+                <div class="disc-bar-track">
+                  <div class="disc-bar-fill ${t.toLowerCase()}" style="width:${disc.percents[t]}%">
+                    ${disc.percents[t] > 15 ? arabicNum(disc.scores[t]) + '/' + arabicNum(disc.maxPerType) : ''}
+                  </div>
+                </div>
+                <div class="disc-bar-pct">${arabicNum(disc.percents[t])}٪</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div style="margin-top:14px">
+          <div class="detail-row"><strong>أسلوب التعلم:</strong> <span>${a.learningStyle}</span></div>
+          <div class="detail-row"><strong>إدارة الضغط:</strong> <span>${a.stressManagement}</span></div>
+        </div>
+
+        <div style="margin-top:14px">
+          <div style="font-weight:600;color:var(--navy-800);margin-bottom:8px;font-size:13px">أعلى ٣ نقاط:</div>
+          <div class="tags-row">${a.keyTraits.top.map(t=>`<span class="tag">✓ ${t}</span>`).join('')}</div>
+        </div>
+        <div style="margin-top:14px">
+          <div style="font-weight:600;color:var(--navy-800);margin-bottom:8px;font-size:13px">يحتاج عمل على:</div>
+          <div class="tags-row">${a.keyTraits.bottom.map(t=>`<span class="tag" style="background:rgba(201,82,82,.1);color:#a23;border-color:rgba(201,82,82,.3)">! ${t}</span>`).join('')}</div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>التحليل الذكي الشامل</h3>
+        <div class="ai-summary"><p>${escapeHTML(da.summary)}</p></div>
+
+        <div class="ai-detailed" style="margin-top:14px">
+          <h5>ملف الشخصية</h5>
+          <p>${escapeHTML(da.personalityProfile)}</p>
+
+          <h5>تحليل مستوى الوعي</h5>
+          <p>${escapeHTML(da.awarenessAnalysis)}</p>
+
+          <h5>التحليل السلوكي</h5>
+          <p>${escapeHTML(da.behaviorAnalysis)}</p>
+
+          <h5>تحليل الأهداف</h5>
+          <p>${escapeHTML(da.goalsAnalysis)}</p>
+
+          <h5>توصيات للجلسة</h5>
+          ${da.recommendations.map(r => `
+            <div class="recommendation">
+              <strong>${escapeHTML(r.title)}:</strong> ${escapeHTML(r.text)}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>معرفة الذات</h3>
+        <div style="display:grid;gap:10px">
+          ${[
+            ['نقاط القوة', p.selfTest.strengths],
+            ['نقاط الضعف', p.selfTest.weaknesses],
+            ['الأهداف', p.selfTest.goals],
+            ['الشغف', p.selfTest.passions],
+            ['الإلهام', p.selfTest.inspiration],
+          ].filter(([,v])=>v).map(([l,v])=>`
+            <div>
+              <div style="font-weight:600;color:var(--navy-800);margin-bottom:4px;font-size:13px">${l}:</div>
+              <div class="detail-text">${escapeHTML(v)}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>الخطة الشخصية</h3>
+        <div style="display:grid;gap:8px">
+          ${goalDomains.filter(d=>p.goals[d.key]).map(d=>`
+            <div class="detail-row" style="background:var(--soft-white);padding:12px;border-radius:10px;border:1px solid var(--line)">
+              <strong>${d.icon} ${d.label}:</strong>
+              <span style="font-size:13px">${escapeHTML(p.goals[d.key])}</span>
+            </div>`).join('') || '<p style="color:var(--text-secondary);font-size:13px">لم يدخل أهدافاً</p>'}
+        </div>
+      </div>
+    `;
+  }
+
+  html += `
+    <div class="detail-section">
+      <h3>📝 ملاحظاتي</h3>
+      <div class="notes-area">
+        <textarea id="advNote" placeholder="أضف ملاحظاتك عن الجلسة هنا (تُحفظ تلقائياً)..." onblur="saveNote('${s.id}', this.value);showToast('تم حفظ الملاحظة','success')">${escapeHTML(note)}</textarea>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <h3>الإيميل المُجهّز للإرسال</h3>
+      <div class="email-preview">${escapeHTML(s.emailContent)}</div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="copyEmail('${s.id}')">${ICON.copy} نسخ النص</button>
+        <button class="btn btn-secondary" onclick="sendDetailEmail('${s.id}')">${ICON.mail} إعادة إرسال الإيميل</button>
+        <button class="btn btn-danger" onclick="closeModal();confirmDelete('${s.id}','${escapeHTML(s.name)}')">${ICON.trash} حذف الجلسة</button>
+      </div>
+    </div>
+  `;
+
+  $('#detailBody').innerHTML = html;
+  $('#detailModal').classList.add('open');
+}
+
+function copyEmail(id){
+  const s = getSessions().find(x=>x.id===id);
+  if(!s) return;
+  navigator.clipboard?.writeText(s.emailContent).then(()=>{
+    showToast('تم نسخ النص ✓', 'success');
+  }).catch(()=>showToast('تعذّر النسخ','error'));
+}
+
+async function sendDetailEmail(id){
+  const s = getSessions().find(x=>x.id===id);
+  if(!s) return;
+  showToast('جارٍ إعادة إرسال الإيميل...', '');
+  const sent = await sendEmailNotification(s);
+  if(sent) showToast('تم إعادة إرسال الإيميل ✓', 'success');
+  else showToast('فشل الإرسال، حاول لاحقاً', 'error');
+}
+
+function closeModal(){
+  $('#detailModal').classList.remove('open');
+}
+
+let pendingDeleteId = null;
+function confirmDelete(id, name){
+  pendingDeleteId = id;
+  $('#confirmText').innerHTML = `هل تريد حذف جلسة <strong>${escapeHTML(name)}</strong> نهائياً؟<br>لا يمكن التراجع عن هذا الإجراء.`;
+  $('#confirmBtn').onclick = doDelete;
+  $('#confirmModal').classList.add('open');
+}
+function closeConfirm(){
+  $('#confirmModal').classList.remove('open');
+  pendingDeleteId = null;
+}
+async function doDelete(){
+  if(!pendingDeleteId) return;
+  const session = sessionsCache.find(s => s.id === pendingDeleteId);
+  if(!session || !session._docId){
+    showToast('لا يمكن حذف هذه الجلسة', 'error');
+    closeConfirm();
+    return;
+  }
+  try {
+    await deleteSessionFromFirebase(session._docId);
+    closeConfirm();
+    showToast('تم حذف الجلسة','success');
+    renderDashboard();
+  } catch(err){
+    console.error('Delete error:', err);
+    showToast('فشل الحذف، حاول مرة أخرى', 'error');
+  }
+}
+
+$('#detailModal').addEventListener('click', e=>{
+  if(e.target.id === 'detailModal') closeModal();
+});
+$('#confirmModal').addEventListener('click', e=>{
+  if(e.target.id === 'confirmModal') closeConfirm();
+});
+
+/* === Helpers === */
+function arabicNum(n){
+  return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+}
+function escapeHTML(s){
+  return String(s||'').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+function truncate(s, n){
+  s = String(s||'');
+  return s.length > n ? s.slice(0,n) + '...' : s;
+}
+function formatArabicDate(dateStr){
+  const d = new Date(dateStr);
+  const dayNames = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const monthNames = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  return `${dayNames[d.getDay()]} ${arabicNum(d.getDate())} ${monthNames[d.getMonth()]}`;
+}
+
+/* === Hash listener === */
+window.addEventListener('hashchange', checkAdminRoute);
+
+/* === النقر على الشعار: مرة واحدة = الرئيسية، ٥ مرات سريعة = الداشبورد === */
+let logoClicks = 0;
+let logoClickTimer = null;
+function handleLogoClick(){
+  logoClicks++;
+  clearTimeout(logoClickTimer);
+
+  if(logoClicks >= 5){
+    // ٥ نقرات سريعة = فتح الداشبورد
+    logoClicks = 0;
+    window.location.hash = '#admin';
+    checkAdminRoute();
+  } else {
+    logoClickTimer = setTimeout(() => {
+      // إذا انتهت المهلة بدون ٥ نقرات، اعتبرها نقرة عادية
+      if(logoClicks === 1){
+        showWelcome();
+      }
+      logoClicks = 0;
+    }, 600);
+  }
+}
+
+/* === Init === */
+checkAdminRoute(); // فحص الرابط أولاً
+if(window.location.hash !== '#admin'){
+  showWelcome();
+}
+
+</script>
+</body>
+</html>
