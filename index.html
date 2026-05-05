@@ -940,7 +940,7 @@ input[type="date"],input[type="time"]{font-family:inherit;color-scheme:light}
 <!-- ============ Student App ============ -->
 <div id="studentApp" class="app">
   <header class="brand-header">
-    <div class="brand" onclick="handleLogoClick()">
+    <div class="brand" onclick="showWelcome()">
       <div class="brand-logo">
         <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="9" y1="13" x2="13" y2="13"/><line x1="9" y1="17" x2="11" y2="17"/><path d="M16.5 8.5l3 3-5 5h-3v-3l5-5z" fill="currentColor" fill-opacity="0.15"/></svg></div>
       </div>
@@ -3142,29 +3142,6 @@ function formatArabicDate(dateStr){
 
 /* === Hash listener === */
 window.addEventListener('hashchange', checkAdminRoute);
-
-/* === النقر على الشعار: مرة واحدة = الرئيسية، ٥ مرات سريعة = الداشبورد === */
-let logoClicks = 0;
-let logoClickTimer = null;
-function handleLogoClick(){
-  logoClicks++;
-  clearTimeout(logoClickTimer);
-
-  if(logoClicks >= 5){
-    // ٥ نقرات سريعة = فتح الداشبورد
-    logoClicks = 0;
-    window.location.hash = '#admin';
-    checkAdminRoute();
-  } else {
-    logoClickTimer = setTimeout(() => {
-      // إذا انتهت المهلة بدون ٥ نقرات، اعتبرها نقرة عادية
-      if(logoClicks === 1){
-        showWelcome();
-      }
-      logoClicks = 0;
-    }, 600);
-  }
-}
 
 /* === Init === */
 checkAdminRoute(); // فحص الرابط أولاً
