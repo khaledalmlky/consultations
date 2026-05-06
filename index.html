@@ -2646,14 +2646,23 @@ function getNotes(id){
   try {
     const raw = localStorage.getItem(NOTES_KEY);
     const all = raw ? JSON.parse(raw) : {};
-    return all[id] || '';
-  } catch { return ''; }
+    const data = all[id];
+    // التوافق مع النسخة القديمة (نص واحد)
+    if(typeof data === 'string'){
+      return { notes: data, recommendations: '' };
+    }
+    return data || { notes: '', recommendations: '' };
+  } catch { return { notes: '', recommendations: '' }; }
 }
-function saveNote(id, text){
+function saveNote(id, field, text){
   try {
     const raw = localStorage.getItem(NOTES_KEY);
     const all = raw ? JSON.parse(raw) : {};
-    all[id] = text;
+    let current = all[id];
+    if(typeof current === 'string') current = { notes: current, recommendations: '' };
+    if(!current) current = { notes: '', recommendations: '' };
+    current[field] = text;
+    all[id] = current;
     localStorage.setItem(NOTES_KEY, JSON.stringify(all));
   } catch(e){}
 }
@@ -3041,10 +3050,23 @@ function openDetail(idx){
 
   html += `
     <div class="detail-section">
-      <h3>📝 ملاحظاتي</h3>
-      <div class="notes-area">
-        <textarea id="advNote" placeholder="أضف ملاحظاتك عن الجلسة هنا (تُحفظ تلقائياً)..." onblur="saveNote('${s.id}', this.value);showToast('تم حفظ الملاحظة','success')">${escapeHTML(note)}</textarea>
+      <h3>📝 ملاحظات المستشار</h3>
+      <div class="notes-area" style="margin-bottom:14px">
+        <textarea id="advNote" placeholder="ملاحظاتك العامة عن الجلسة..." onblur="saveNote('${s.id}', 'notes', this.value);showToast('تم حفظ الملاحظة','success')">${escapeHTML(note.notes)}</textarea>
       </div>
+
+      <h3 style="margin-top:18px">💡 التوصيات للطالب</h3>
+      <div class="notes-area">
+        <textarea id="advRec" placeholder="التوصيات والإرشادات للطالب..." onblur="saveNote('${s.id}', 'recommendations', this.value);showToast('تم حفظ التوصيات','success')">${escapeHTML(note.recommendations)}</textarea>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <h3>📄 التقرير الاحترافي</h3>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">حمّل تقرير PDF شامل يحتوي على كل البيانات والتحليل وملاحظاتك، جاهز للإرسال للطالب.</p>
+      <button class="btn btn-gold btn-block" onclick="generateStudentReport('${s.id}')">
+        ${ICON.pdf} تحميل تقرير الطالب (PDF)
+      </button>
     </div>
 
     <div class="detail-section">
@@ -3060,6 +3082,683 @@ function openDetail(idx){
 
   $('#detailBody').innerHTML = html;
   $('#detailModal').classList.add('open');
+}
+
+/* ============================================================
+   STUDENT REPORT PDF - تقرير الطالب الاحترافي
+   ============================================================ */
+function generateStudentReport(sessionId){
+  const s = getSessions().find(x => x.id === sessionId);
+  if(!s) return;
+
+  const note = getNotes(s.id);
+  const dateStr = formatArabicDate(s.appointment.date);
+  const todayStr = new Date().toLocaleDateString('ar-SA');
+  const typeAr = s.sessionType === 'general' ? 'استشارة عامة' : 'استشارة تخطيط';
+
+  // بناء أقسام الـPDF حسب نوع الجلسة
+  let contentSections = '';
+
+  if(s.sessionType === 'general'){
+    const g = s.general;
+    contentSections = `
+      <div class="report-section">
+        <div class="section-title">تفاصيل الاستشارة</div>
+        <div class="info-row"><strong>الموضوع:</strong> ${escapeHTML(g.topic)}</div>
+        <div class="text-block">
+          <div class="text-label">وصف الموضوع:</div>
+          <p>${escapeHTML(g.description).replace(/\n/g,'<br>')}</p>
+        </div>
+        <div class="info-row"><strong>هل سبق واستشار:</strong> ${g.prevConsult==='yes'?'نعم':'لا'}</div>
+        ${g.prevWho ? `<div class="info-row"><strong>من استشار:</strong> ${escapeHTML(g.prevWho)}</div>` : ''}
+        ${g.prevAnswer ? `<div class="text-block"><div class="text-label">ما قيل له:</div><p>${escapeHTML(g.prevAnswer).replace(/\n/g,'<br>')}</p></div>` : ''}
+        ${g.prevView ? `<div class="text-block"><div class="text-label">رأيه في كلامهم:</div><p>${escapeHTML(g.prevView).replace(/\n/g,'<br>')}</p></div>` : ''}
+        <div class="text-block">
+          <div class="text-label">رأي الطالب في الموضوع:</div>
+          <p>${escapeHTML(g.opinion).replace(/\n/g,'<br>')}</p>
+        </div>
+      </div>
+
+      <div class="report-section">
+        <div class="section-title">التحليل الذكي</div>
+        <div class="ai-box">
+          <p>${escapeHTML(s.aiSummary).replace(/\n/g,'<br>')}</p>
+        </div>
+      </div>
+    `;
+  } else {
+    const p = s.planning;
+    const a = s.analysis;
+    const da = s.detailedAnalysis;
+    const disc = a.disc;
+
+    // قسم التعريف الشخصي
+    contentSections = `
+      <div class="report-section">
+        <div class="section-title">التعريف الشخصي</div>
+        <div class="text-block">
+          <div class="text-label">عن الطالب:</div>
+          <p>${escapeHTML(p.intro.intro).replace(/\n/g,'<br>')}</p>
+        </div>
+        <div class="highlight-box">
+          <strong>الطموح:</strong> ${escapeHTML(p.intro.ambition)}
+        </div>
+        <div class="highlight-box">
+          <strong>يريد أن يكون:</strong> ${escapeHTML(p.intro.become)}
+        </div>
+      </div>
+
+      <div class="report-section">
+        <div class="section-title">معرفة الذات</div>
+        ${[
+          ['نقاط القوة', p.selfTest.strengths, '#3a9d6e'],
+          ['نقاط الضعف', p.selfTest.weaknesses, '#c95252'],
+          ['الأهداف', p.selfTest.goals, '#234a85'],
+          ['الشغف', p.selfTest.passions, '#b8862a'],
+          ['مصادر الإلهام', p.selfTest.inspiration, '#d4a23c'],
+        ].filter(([,v])=>v).map(([label, val, color])=>`
+          <div class="self-block" style="border-right-color:${color}">
+            <strong style="color:${color}">${label}:</strong>
+            <p>${escapeHTML(val).replace(/\n/g,'<br>')}</p>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="report-section">
+        <div class="section-title">مستوى الوعي الذاتي</div>
+        <div class="awareness-card">
+          <div class="awareness-bar-wrap">
+            <div class="awareness-bar" style="width:${a.percentage}%;background:${a.levelColor}"></div>
+          </div>
+          <div class="awareness-info">
+            <div class="awareness-num">${a.percentage}<span>٪</span></div>
+            <div class="awareness-level">${a.level}</div>
+            <div class="awareness-desc">${a.levelDesc}</div>
+            <div class="awareness-score">النتيجة: ${a.score} من ${a.maxScore}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-section">
+        <div class="section-title">نتيجة اختبار نمط الشخصية (DISC)</div>
+        <div class="disc-result-pdf">
+          <div class="disc-header">
+            <div class="disc-dominant-name">${disc.dominantName}</div>
+            ${disc.secondaryName ? `<div class="disc-secondary-name">مع ميول ${disc.secondaryName}</div>` : ''}
+          </div>
+          <div class="disc-bars-pdf">
+            ${['D','I','S','C'].map(t => {
+              const colors = {D:'#c95252', I:'#d49b3c', S:'#3a9d6e', C:'#5283bf'};
+              return `
+                <div class="disc-bar-row-pdf">
+                  <div class="disc-letter-pdf" style="background:${colors[t]}">${t}</div>
+                  <div class="disc-name-pdf">${discNames[t].split(' ')[0]}</div>
+                  <div class="disc-bar-track-pdf">
+                    <div class="disc-bar-fill-pdf" style="width:${disc.percents[t]}%;background:${colors[t]}"></div>
+                  </div>
+                  <div class="disc-pct-pdf">${disc.percents[t]}٪</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div class="report-section">
+        <div class="section-title">التحليل الذكي الشامل</div>
+        <div class="ai-box">
+          <strong>الخلاصة:</strong>
+          <p>${escapeHTML(da.summary)}</p>
+        </div>
+        <div class="analysis-block">
+          <h4>ملف الشخصية</h4>
+          <p>${escapeHTML(da.personalityProfile)}</p>
+        </div>
+        <div class="analysis-block">
+          <h4>تحليل مستوى الوعي</h4>
+          <p>${escapeHTML(da.awarenessAnalysis)}</p>
+        </div>
+        <div class="analysis-block">
+          <h4>التحليل السلوكي</h4>
+          <p>${escapeHTML(da.behaviorAnalysis)}</p>
+        </div>
+        <div class="analysis-block">
+          <h4>تحليل الأهداف</h4>
+          <p>${escapeHTML(da.goalsAnalysis)}</p>
+        </div>
+      </div>
+
+      <div class="report-section">
+        <div class="section-title">جدول الأهداف الشخصية</div>
+        <table class="goals-table">
+          <thead>
+            <tr><th>المجال</th><th>الأهداف</th></tr>
+          </thead>
+          <tbody>
+            ${goalDomains.map(dom => `
+              <tr>
+                <td class="goal-domain-cell">${dom.icon} &nbsp; ${dom.label}</td>
+                <td class="goal-content-cell">${p.goals[dom.key] ? escapeHTML(p.goals[dom.key]).replace(/\n/g,'<br>') : '<span style="color:#bbb">—</span>'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  // قسم ملاحظات المستشار
+  let advisorNotes = '';
+  if(note.notes && note.notes.trim()){
+    advisorNotes += `
+      <div class="report-section advisor-notes-section">
+        <div class="section-title">ملاحظات المستشار</div>
+        <div class="advisor-text-block notes-block">
+          <p>${escapeHTML(note.notes).replace(/\n/g,'<br>')}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  if(note.recommendations && note.recommendations.trim()){
+    advisorNotes += `
+      <div class="report-section advisor-notes-section">
+        <div class="section-title">التوصيات للطالب</div>
+        <div class="advisor-text-block recommendations-block">
+          <p>${escapeHTML(note.recommendations).replace(/\n/g,'<br>')}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  if(!advisorNotes){
+    advisorNotes = `
+      <div class="report-section">
+        <div class="empty-notes">
+          <p>لم يتم إضافة ملاحظات أو توصيات بعد.</p>
+        </div>
+      </div>
+    `;
+  }
+
+  // الـHTML الكامل للتقرير
+  const reportHTML = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تقرير ${escapeHTML(s.name)} - ${s.id}</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Tajawal','Arial',sans-serif;
+    background:#faf6ee;
+    color:#2c3e50;
+    direction:rtl;
+    line-height:1.7;
+    padding:30px;
+  }
+  .page{max-width:780px;margin:0 auto}
+
+  /* HEADER */
+  .report-header{
+    text-align:center;
+    border-bottom:3px double #b8862a;
+    padding-bottom:24px;
+    margin-bottom:30px;
+  }
+  .report-logo{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:70px;height:70px;
+    background:linear-gradient(135deg,#234a85,#1a3a6e);
+    border-radius:18px;color:#e9c46a;
+    margin-bottom:12px;
+  }
+  .report-logo svg{width:36px;height:36px}
+  .report-header h1{
+    font-size:30px;color:#1a3a6e;
+    margin:8px 0 6px;font-weight:800;
+  }
+  .report-header .subtitle{
+    font-size:14px;color:#8c6420;font-weight:600;
+    margin-bottom:6px;
+  }
+  .report-header .meta{
+    font-size:12px;color:#8a96a8;
+    margin-top:8px;
+  }
+
+  /* STUDENT INFO BOX */
+  .student-box{
+    background:linear-gradient(135deg,#234a85,#1a3a6e);
+    color:white;border-radius:14px;
+    padding:22px 26px;margin-bottom:24px;
+    page-break-inside:avoid;
+  }
+  .student-box h2{
+    font-size:24px;margin-bottom:6px;
+    color:#e9c46a;font-weight:800;
+  }
+  .student-box .student-meta{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:8px 20px;margin-top:14px;
+    font-size:13px;
+  }
+  .student-box .student-meta div{
+    padding:6px 0;
+  }
+  .student-box .student-meta strong{
+    color:#e9c46a;margin-left:6px;
+  }
+  .student-box .session-tag{
+    display:inline-block;
+    background:rgba(233,196,106,0.2);
+    color:#e9c46a;border:1px solid #e9c46a;
+    padding:4px 14px;border-radius:999px;
+    font-size:12px;font-weight:700;
+    margin-top:8px;
+  }
+
+  /* SECTIONS */
+  .report-section{
+    background:white;
+    border:1px solid rgba(212,162,60,.25);
+    border-radius:12px;
+    padding:20px 22px;
+    margin-bottom:18px;
+    page-break-inside:avoid;
+  }
+  .section-title{
+    font-size:14px;
+    color:#8c6420;
+    letter-spacing:1.2px;
+    margin-bottom:14px;
+    padding-bottom:10px;
+    border-bottom:1px solid rgba(212,162,60,.3);
+    font-weight:800;
+    text-transform:uppercase;
+  }
+
+  /* INFO / TEXT */
+  .info-row{
+    padding:6px 0;font-size:13.5px;
+  }
+  .info-row strong{
+    color:#234a85;
+    margin-left:8px;
+  }
+  .text-block{
+    margin:12px 0;
+  }
+  .text-label{
+    font-size:13px;font-weight:700;
+    color:#234a85;margin-bottom:6px;
+  }
+  .text-block p{
+    background:#faf6ee;
+    padding:12px 14px;border-radius:8px;
+    font-size:13px;line-height:1.8;
+    border-right:3px solid #d4a23c;
+  }
+  .highlight-box{
+    background:#fdf6e3;
+    padding:12px 16px;
+    border-radius:8px;
+    border-right:3px solid #d4a23c;
+    margin-bottom:8px;
+    font-size:13.5px;
+  }
+  .highlight-box strong{color:#234a85;margin-left:6px}
+
+  /* SELF KNOWLEDGE */
+  .self-block{
+    margin-bottom:10px;
+    padding:12px 14px;
+    background:#faf6ee;
+    border-radius:8px;
+    border-right:3px solid;
+    page-break-inside:avoid;
+  }
+  .self-block strong{
+    font-size:13.5px;display:block;margin-bottom:5px;
+  }
+  .self-block p{
+    font-size:13px;line-height:1.7;
+    color:#2c3e50;
+  }
+
+  /* AWARENESS BAR */
+  .awareness-card{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .awareness-bar-wrap{
+    height:24px;
+    background:#f3ecdc;
+    border-radius:999px;
+    overflow:hidden;
+    border:1px solid #d4a23c40;
+  }
+  .awareness-bar{
+    height:100%;
+    border-radius:999px;
+    transition:width .8s;
+  }
+  .awareness-info{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:0 20px;
+    align-items:center;
+  }
+  .awareness-num{
+    font-size:48px;
+    font-weight:800;
+    color:#234a85;
+    line-height:1;
+    grid-row:span 3;
+  }
+  .awareness-num span{font-size:24px}
+  .awareness-level{
+    font-size:18px;
+    font-weight:700;
+    color:#234a85;
+  }
+  .awareness-desc{
+    font-size:13px;
+    color:#5a6b7d;
+  }
+  .awareness-score{
+    font-size:12px;
+    color:#8a96a8;
+    font-weight:600;
+  }
+
+  /* DISC RESULT */
+  .disc-result-pdf{
+    text-align:center;
+  }
+  .disc-header{
+    margin-bottom:18px;padding-bottom:14px;
+    border-bottom:1px solid rgba(212,162,60,.25);
+  }
+  .disc-dominant-name{
+    font-size:24px;font-weight:800;
+    color:#234a85;margin-bottom:4px;
+  }
+  .disc-secondary-name{
+    font-size:13px;color:#5a6b7d;
+  }
+  .disc-bars-pdf{
+    display:grid;gap:12px;
+  }
+  .disc-bar-row-pdf{
+    display:grid;
+    grid-template-columns:32px 80px 1fr 50px;
+    gap:10px;align-items:center;
+  }
+  .disc-letter-pdf{
+    width:32px;height:32px;
+    border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    color:white;font-weight:800;font-size:16px;
+  }
+  .disc-name-pdf{
+    font-size:13px;font-weight:700;
+    text-align:right;
+  }
+  .disc-bar-track-pdf{
+    height:18px;
+    background:#f3ecdc;
+    border-radius:999px;
+    overflow:hidden;
+    border:1px solid #d4a23c30;
+  }
+  .disc-bar-fill-pdf{
+    height:100%;
+    border-radius:999px;
+  }
+  .disc-pct-pdf{
+    font-size:13px;font-weight:700;
+    color:#234a85;text-align:left;
+  }
+
+  /* AI ANALYSIS */
+  .ai-box{
+    background:linear-gradient(135deg,rgba(233,196,106,.15),rgba(184,134,42,.05));
+    border:1px solid rgba(184,134,42,.3);
+    padding:16px 18px;border-radius:12px;
+    margin-bottom:14px;
+  }
+  .ai-box strong{color:#234a85;display:block;margin-bottom:6px}
+  .ai-box p{
+    font-size:13.5px;line-height:1.85;
+    color:#1a3a6e;
+  }
+  .analysis-block{
+    margin-bottom:14px;
+    padding:12px 14px;
+    background:#faf6ee;
+    border-radius:8px;
+    page-break-inside:avoid;
+  }
+  .analysis-block h4{
+    font-size:13px;color:#8c6420;
+    margin-bottom:6px;font-weight:800;
+    display:flex;align-items:center;
+  }
+  .analysis-block h4::before{
+    content:"";width:4px;height:14px;
+    background:#d4a23c;
+    margin-left:8px;border-radius:2px;
+  }
+  .analysis-block p{
+    font-size:13px;line-height:1.8;
+  }
+
+  /* GOALS TABLE */
+  .goals-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+  }
+  .goals-table thead th{
+    background:#234a85;
+    color:white;
+    padding:12px;
+    border:1px solid #234a85;
+    font-weight:700;
+  }
+  .goals-table .goal-domain-cell{
+    background:#fdf6e3;
+    font-weight:700;
+    color:#8c6420;
+    width:140px;
+    padding:14px;
+    border:1px solid #d4a23c;
+    text-align:center;
+  }
+  .goals-table .goal-content-cell{
+    padding:14px;
+    border:1px solid #d4a23c;
+    font-size:13px;
+    line-height:1.8;
+    color:#2c3e50;
+    background:white;
+  }
+
+  /* ADVISOR NOTES SECTION */
+  .advisor-notes-section{
+    border:2px solid #d4a23c;
+    background:linear-gradient(135deg,#fdf6e3,#faf6ee);
+  }
+  .advisor-text-block{
+    padding:16px 18px;
+    border-radius:10px;
+    background:white;
+    border-right:4px solid #d4a23c;
+    font-size:14px;line-height:1.85;
+  }
+  .notes-block{
+    border-right-color:#5283bf;
+  }
+  .recommendations-block{
+    border-right-color:#3a9d6e;
+  }
+  .empty-notes{
+    text-align:center;
+    color:#8a96a8;
+    font-style:italic;
+    padding:14px;
+  }
+
+  /* FOOTER */
+  .report-footer{
+    text-align:center;
+    padding:20px;
+    border-top:2px solid rgba(212,162,60,.3);
+    margin-top:30px;
+    color:#8a96a8;
+    font-size:11px;
+  }
+  .report-footer p{margin-bottom:4px}
+  .report-footer .signature{
+    font-family:'Amiri',serif;
+    font-size:14px;color:#8c6420;
+    margin-top:8px;font-weight:700;
+  }
+
+  /* PRINT */
+  @media print {
+    body{padding:0;background:white}
+    .page{padding:0}
+    .report-section{
+      box-shadow:none;
+    }
+    @page{
+      size:A4;
+      margin:15mm;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="report-header">
+    <div class="report-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <line x1="9" y1="13" x2="13" y2="13"/>
+        <line x1="9" y1="17" x2="11" y2="17"/>
+        <path d="M16.5 8.5l3 3-5 5h-3v-3l5-5z" fill="currentColor" fill-opacity="0.15"/>
+      </svg>
+    </div>
+    <h1>تقرير الجلسة الاستشارية</h1>
+    <div class="subtitle">خالد المالكي للاستشارات والتخطيط الشخصي</div>
+    <div class="meta">تاريخ التقرير: ${todayStr}</div>
+  </div>
+
+  <div class="student-box">
+    <h2>${escapeHTML(s.name)}</h2>
+    <span class="session-tag">${typeAr}</span>
+    <div class="student-meta">
+      <div><strong>رقم الطلب:</strong> ${s.id}</div>
+      <div><strong>الجوال:</strong> ${escapeHTML(s.phone)}</div>
+      <div><strong>تاريخ الجلسة:</strong> ${dateStr}</div>
+      <div><strong>الوقت:</strong> ${s.appointment.timeDisplay || s.appointment.time}</div>
+    </div>
+  </div>
+
+  ${contentSections}
+
+  ${advisorNotes}
+
+  <div class="report-footer">
+    <p>هذا التقرير يحتوي على معلومات سرية وموجّه للطالب فقط</p>
+    <p class="signature">خالد المالكي للاستشارات والتخطيط الشخصي</p>
+    <p>© ${new Date().getFullYear()}</p>
+  </div>
+</div>
+</body>
+</html>`;
+
+  // عرض التقرير في مودال داخلي (مثل الخطة الشخصية)
+  const bodyMatch = reportHTML.match(/<body[^>]*>([\s\S]*?)<\/body>/);
+  const bodyContent = bodyMatch ? bodyMatch[1] : reportHTML;
+  const styleMatch = reportHTML.match(/<style>([\s\S]*?)<\/style>/);
+  const styleContent = styleMatch ? styleMatch[1] : '';
+
+  const reportModal = document.createElement('div');
+  reportModal.id = 'reportPreviewModal';
+  reportModal.style.cssText = `
+    position:fixed;inset:0;z-index:9999;
+    background:rgba(0,0,0,.7);
+    display:flex;flex-direction:column;
+    padding:0;
+  `;
+
+  reportModal.innerHTML = `
+    <div class="report-toolbar" style="background:white;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;box-shadow:0 2px 10px rgba(0,0,0,.2);direction:rtl">
+      <div style="font-weight:700;color:#1a3a6e;font-size:16px">📄 تقرير ${escapeHTML(s.name)}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="btnPrintReport" style="padding:10px 20px;background:linear-gradient(135deg,#d4a23c,#b8862a);color:white;border:none;border-radius:10px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer">🖨️ طباعة / حفظ PDF</button>
+        <button id="btnCloseReport" style="padding:10px 20px;background:#f3ecdc;color:#1a3a6e;border:1px solid #d4a23c40;border-radius:10px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer">إغلاق ✕</button>
+      </div>
+    </div>
+    <div class="report-hint" style="background:#fdf6e3;padding:10px 20px;font-size:13px;color:#234a85;border-bottom:1px solid #d4a23c40;line-height:1.6;direction:rtl">
+      💡 <strong>للحفظ:</strong> اضغط "طباعة / حفظ PDF" → اختر "Save as PDF" من نافذة الطباعة، ثم أرسل الملف للطالب.
+    </div>
+    <div id="reportContentArea" style="flex:1;overflow:auto;background:#faf6ee;padding:20px;direction:rtl">
+      ${bodyContent}
+    </div>
+  `;
+
+  const reportStyle = document.createElement('style');
+  reportStyle.id = 'reportPrintStyle';
+  reportStyle.textContent = `
+    #reportContentArea { font-family:'Tajawal',Arial,sans-serif; color:#2c3e50; line-height:1.7; }
+    ${styleContent.replace(/body\s*\{/g, '#reportContentArea {')}
+
+    @media print {
+      body * { visibility: hidden !important; }
+      #reportContentArea, #reportContentArea * { visibility: visible !important; }
+      #reportPreviewModal {
+        position: absolute !important;
+        inset: 0 !important;
+        background: white !important;
+        padding: 0 !important;
+      }
+      .report-toolbar, .report-hint { display: none !important; }
+      #reportContentArea {
+        position: absolute !important;
+        left: 0 !important; top: 0 !important; right: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+        overflow: visible !important;
+      }
+      @page { size: A4; margin: 15mm; }
+    }
+  `;
+  document.head.appendChild(reportStyle);
+  document.body.appendChild(reportModal);
+
+  reportModal.querySelector('#btnPrintReport').onclick = () => {
+    window.print();
+  };
+
+  const closeReportModal = () => {
+    if(document.body.contains(reportModal)) document.body.removeChild(reportModal);
+    if(document.head.contains(reportStyle)) document.head.removeChild(reportStyle);
+    document.removeEventListener('keydown', escHandler);
+  };
+
+  reportModal.querySelector('#btnCloseReport').onclick = closeReportModal;
+
+  const escHandler = (e) => { if(e.key === 'Escape') closeReportModal(); };
+  document.addEventListener('keydown', escHandler);
+
+  showToast('تم عرض التقرير ✓', 'success');
 }
 
 function copyEmail(id){
